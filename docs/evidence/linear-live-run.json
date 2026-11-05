@@ -1,0 +1,175 @@
+{
+  "runAt": "2026-11-05T17:28:14.644Z",
+  "elapsedMs": 87452,
+  "guide": {
+    "id": "61c8bfeb-eb92-4d21-8260-11d540e0ed0c",
+    "name": "Linear",
+    "category": "Live research",
+    "glyph": "LI",
+    "color": "#64745e",
+    "difficulty": "Unconfirmed",
+    "effort": "Not established",
+    "wait": "Not established",
+    "effortNote": "A documentation scan cannot determine your implementation effort.",
+    "waitNote": "No provider SLA or applicable approval path was verified.",
+    "production": "Evidence collected → human validation → setup",
+    "summary": "Live documentation research found OAuth references. This is an evidence packet with an advisory setup plan; provider-specific requirements still need validation.",
+    "checkedAt": "2026-11-05",
+    "kind": "live",
+    "supported": "documented",
+    "steps": [
+      {
+        "title": "Confirm the registration path",
+        "detail": "Open the cited documentation and locate app registration, account prerequisites, and the developer console. The agent has not signed in or created an app.",
+        "owner": "You",
+        "level": "estimate",
+        "sources": [
+          "1",
+          "3"
+        ]
+      },
+      {
+        "title": "Define the minimum permissions",
+        "detail": "Map each integration action to a documented permission. Confirm its sensitivity and whether it changes your approval path.",
+        "owner": "You",
+        "level": "estimate",
+        "sources": [
+          "1",
+          "3"
+        ]
+      },
+      {
+        "title": "Configure your OAuth callback",
+        "detail": "Locate the documented redirect requirements and code exchange. Use your OAuth library’s state and PKCE support as appropriate to the provider.",
+        "owner": "You",
+        "level": "estimate",
+        "sources": [
+          "1",
+          "3"
+        ]
+      },
+      {
+        "title": "Test one complete user connection",
+        "detail": "After you register the app, test consent, denial, token handling, and access to a real resource. These account-dependent operations require you.",
+        "owner": "You",
+        "level": "estimate",
+        "sources": []
+      },
+      {
+        "title": "Confirm production and approval requirements",
+        "detail": "Check the policy sources and contact the provider if the approval requirement or turnaround remains unclear. Do not infer no review from missing documentation.",
+        "owner": "You",
+        "level": "estimate",
+        "sources": [
+          "3"
+        ]
+      }
+    ],
+    "blockers": [
+      {
+        "title": "Approval applicability remains unconfirmed",
+        "detail": "The retrieved pages mention review, verification, or distribution. Check the exact conditions for your scopes and audience before planning a launch.",
+        "owner": "You",
+        "level": "unknown",
+        "sources": [
+          "3"
+        ]
+      },
+      {
+        "title": "Account and permission gates need a human",
+        "detail": "Log in to the developer console and confirm your account role, workspace policy, and app-creation access. Public docs cannot prove those permissions.",
+        "owner": "You",
+        "level": "unknown",
+        "sources": []
+      }
+    ],
+    "sources": [
+      {
+        "id": "1",
+        "title": "OAuth 2.0 authentication – Linear Developers",
+        "url": "https://linear.app/developers/oauth-2-0-authentication",
+        "checkedAt": "2026-11-05",
+        "excerpt": "Linear supports OAuth2 authentication, which is recommended if you’re building applications to integrate with Linear."
+      },
+      {
+        "id": "2",
+        "title": "OAuth actor authorization – Linear Developers",
+        "url": "https://linear.app/developers/oauth-actor-authorization",
+        "checkedAt": "2026-11-05",
+        "excerpt": "By default all Linear’s API authentication methods treat the authenticating user as the API actor. This means that actions performed with the OAuth …"
+      },
+      {
+        "id": "3",
+        "title": "OAuth application manifests – Linear Developers",
+        "url": "https://linear.app/developers/oauth-app-manifests",
+        "checkedAt": "2026-11-05",
+        "excerpt": "OAuth app manifests let developers define a Linear OAuth app as structured data instead of filling the form manually. This is useful for …"
+      },
+      {
+        "id": "4",
+        "title": "File storage authentication – Linear Developers",
+        "url": "https://linear.app/developers/file-storage-authentication",
+        "checkedAt": "2026-11-05",
+        "excerpt": "File storage authentication Files uploaded to Linear, such as images and attachments, are stored in Linear’s private cloud storage. You must authenticate to …"
+      }
+    ],
+    "unknowns": [
+      "OAuth references were found; exact account eligibility and approval conditions are not independently verified.",
+      "Effort, review turnaround, pricing, and scope classifications are unknown unless confirmed in the linked sources.",
+      "No account login, app creation, token exchange, or review submission was performed."
+    ],
+    "agent": [
+      "Discover public documentation",
+      "Inspect OAuth and policy references",
+      "Collect source excerpts and generate an advisory checklist"
+    ],
+    "human": [
+      "Confirm the official provider identity and requirements",
+      "Log in, register the app, and choose scopes",
+      "Test the OAuth flow and submit any required approval"
+    ],
+    "tested": [
+      "4 public pages fetched; 4 OAuth-related pages retained. Source retrieval is not a completed setup test.",
+      "Generated by a deterministic, open-source research workflow. No LLM or paid API was used.",
+      "Local model synthesis did not pass; no model-generated steps were retained."
+    ],
+    "trace": [
+      {
+        "message": "Identifying the provider and a public documentation entry point",
+        "at": "2026-11-05T17:26:47.192Z"
+      },
+      {
+        "message": "Fetched linear.app; looking for OAuth setup and approval documentation",
+        "at": "2026-11-05T17:26:59.511Z"
+      },
+      {
+        "message": "Inspected /developers/oauth-actor-authorization",
+        "at": "2026-11-05T17:27:11.856Z"
+      },
+      {
+        "message": "Inspected /developers/oauth-app-manifests",
+        "at": "2026-11-05T17:27:11.856Z"
+      },
+      {
+        "message": "Inspected /developers/file-storage-authentication",
+        "at": "2026-11-05T17:27:11.856Z"
+      },
+      {
+        "message": "Could not inspect /.well-known/oauth-app-manifest.schema.json; retained as an uncertainty",
+        "at": "2026-11-05T17:27:23.876Z"
+      },
+      {
+        "message": "Checking evidence coverage and separating unverified setup work",
+        "at": "2026-11-05T17:27:23.876Z"
+      },
+      {
+        "message": "Drafting provider-specific steps with the configured local model",
+        "at": "2026-11-05T17:27:23.882Z"
+      },
+      {
+        "message": "Local synthesis unavailable or evidence check failed; keeping the extractive guide",
+        "at": "2026-11-05T17:28:14.644Z"
+      }
+    ]
+  }
+}

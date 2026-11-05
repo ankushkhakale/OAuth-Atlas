@@ -1,0 +1,49 @@
+{
+  "input": "https://docs.gitea.com",
+  "at": "2026-11-05T18:12:37.770Z",
+  "elapsedMs": 17754,
+  "status": "oauth_documented",
+  "coverage": {
+    "oauth": true,
+    "registration": true,
+    "permissions": true,
+    "approval": true
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "OAuth2 Provider | Gitea Documentation",
+      "url": "https://docs.gitea.com/development/oauth2-provider/",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "2",
+      "title": "Authentication | Gitea Documentation",
+      "url": "https://docs.gitea.com/administration/authentication/",
+      "provenance": "Provider-site documentation"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://docs.gitea.com/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://docs.gitea.com/llms.txt",
+      "kind": "index",
+      "status": "unavailable",
+      "detail": "HTTP 404"
+    },
+    {
+      "url": "https://docs.gitea.com/development/oauth2-provider/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://docs.gitea.com/administration/authentication/",
+      "kind": "document",
+      "status": "ok"
+    }
+  ]
+}

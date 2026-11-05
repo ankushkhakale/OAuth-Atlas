@@ -1,0 +1,138 @@
+{
+  "input": "Figma",
+  "at": "2026-11-05T18:16:04.742Z",
+  "elapsedMs": 82912,
+  "status": "oauth_documented",
+  "coverage": {
+    "oauth": true,
+    "registration": true,
+    "permissions": true,
+    "approval": true
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "Authentication | Developer Docs",
+      "url": "https://developers.figma.com/docs/rest-api/authentication/",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "2",
+      "title": "OAuth with Plugins | Developer Docs",
+      "url": "https://developers.figma.com/docs/plugins/oauth-with-plugins/",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "3",
+      "title": "OAuth apps | Developer Docs",
+      "url": "https://developers.figma.com/docs/rest-api/oauth-apps/",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "4",
+      "title": "OAuth 2.0 — OAuth",
+      "url": "https://oauth.net/2/",
+      "provenance": "Documentation linked by developers.figma.com"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/packages/providers/providers.yaml",
+      "kind": "registry",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/integrations/all/figma-scim.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/integrations/all/figma.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/figma",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/figma-scim",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://www.figma.com/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://www.figma.com/developers/api",
+      "kind": "document",
+      "status": "timeout",
+      "detail": "Request timed out."
+    },
+    {
+      "url": "https://www.figma.com/llms.txt",
+      "kind": "index",
+      "status": "unavailable",
+      "detail": "HTTP 404"
+    },
+    {
+      "url": "https://www.figma.com/robots.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://api.figma.com/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://www.figma.com/sitemap.xml",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://developers.figma.com/llms.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://help.figma.com/hc/sitemap.xml",
+      "kind": "index",
+      "status": "unavailable",
+      "detail": "Page exceeds the research size limit."
+    },
+    {
+      "url": "https://developers.figma.com/docs/rest-api/authentication/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://developers.figma.com/docs/widgets/llms.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://developers.figma.com/docs/plugins/llms.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://developers.figma.com/docs/plugins/oauth-with-plugins/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://developers.figma.com/docs/rest-api/oauth-apps/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://oauth.net/2/",
+      "kind": "document",
+      "status": "ok"
+    }
+  ]
+}

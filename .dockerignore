@@ -1,0 +1,10 @@
+node_modules
+.git
+.sites-runtime
+.wrangler
+dist
+outputs
+work
+.env*
+.dev.vars*
+*.tsbuildinfo

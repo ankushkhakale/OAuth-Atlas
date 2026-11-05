@@ -1,0 +1,24 @@
+services:
+  atlas:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - atlas-data:/data
+    environment:
+      # Default is keyless evidence extraction. Enable these for local AI:
+      # OLLAMA_URL: http://ollama:11434
+      # OLLAMA_MODEL: qwen2.5:1.5b
+      ATLAS_BIND: 0.0.0.0
+    restart: unless-stopped
+  ollama:
+    image: ollama/ollama:0.40.14
+    profiles: [ai]
+    volumes:
+      - ollama-models:/root/.ollama
+    environment:
+      OLLAMA_NO_CLOUD: "true"
+    # Intentionally no host port: inference is only reachable inside the compose network.
+volumes:
+  atlas-data:
+  ollama-models:

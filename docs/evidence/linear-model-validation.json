@@ -1,0 +1,10 @@
+{
+  "runAt": "2026-11-05T17:33:12.518Z",
+  "source": "https://linear.app/developers/oauth-2-0-authentication",
+  "model": "qwen2.5:1.5b",
+  "modelCreatedAt": "2026-11-05T17:32:24.550155671Z",
+  "validation": "All source IDs and proof excerpts match the retrieved official page after whitespace normalization; interpretation still requires human review.",
+  "stepsValidated": 4,
+  "blockersValidated": 1,
+  "proofRetention": "Supporting excerpts were used internally for validation, not redistributed in this record."
+}

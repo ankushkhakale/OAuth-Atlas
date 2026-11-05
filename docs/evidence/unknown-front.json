@@ -1,0 +1,76 @@
+{
+  "input": "Front",
+  "at": "2026-11-05T18:49:04.342Z",
+  "elapsedMs": 44431,
+  "status": "oauth_documented",
+  "coverage": {
+    "oauth": true,
+    "registration": true,
+    "permissions": true,
+    "approval": false
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "Create, manage, and publish apps",
+      "url": "https://dev.frontapp.com/docs/create-and-manage-apps",
+      "provenance": "Documentation linked by raw.githubusercontent.com"
+    },
+    {
+      "id": "2",
+      "title": "OAuth",
+      "url": "https://dev.frontapp.com/docs/oauth",
+      "provenance": "Documentation linked by raw.githubusercontent.com"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/packages/providers/providers.yaml",
+      "kind": "registry",
+      "status": "ok",
+      "detail": "Bundled public discovery metadata from 2026-11-05; not OAuth evidence."
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/front",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/api-integrations/front-api-key.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/integrations/all/front.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/api-integrations/front-api-key",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://dev.frontapp.com/docs/oauth",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://dev.frontapp.com/docs/create-and-manage-apps",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://html.duckduckgo.com",
+      "kind": "search",
+      "status": "unavailable",
+      "detail": "Free search unavailable."
+    },
+    {
+      "url": "https://www.bing.com",
+      "kind": "search",
+      "status": "ok",
+      "detail": "0 search candidates; candidates are not OAuth evidence."
+    }
+  ]
+}

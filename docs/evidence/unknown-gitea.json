@@ -1,0 +1,61 @@
+{
+  "input": "https://docs.gitea.com",
+  "at": "2026-11-05T18:24:48.737Z",
+  "elapsedMs": 36163,
+  "status": "oauth_documented",
+  "coverage": {
+    "oauth": true,
+    "registration": true,
+    "permissions": true,
+    "approval": false
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "OAuth2 Provider | Gitea Documentation",
+      "url": "https://docs.gitea.com/development/oauth2-provider/",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "2",
+      "title": "Authentication | Gitea Documentation",
+      "url": "https://docs.gitea.com/administration/authentication/",
+      "provenance": "Provider-site documentation"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://docs.gitea.com/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://docs.gitea.com/llms.txt",
+      "kind": "index",
+      "status": "unavailable",
+      "detail": "HTTP 404"
+    },
+    {
+      "url": "https://docs.gitea.com/administration/authentication/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://docs.gitea.com/development/oauth2-provider/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://html.duckduckgo.com",
+      "kind": "search",
+      "status": "unavailable",
+      "detail": "Free search unavailable."
+    },
+    {
+      "url": "https://www.bing.com",
+      "kind": "search",
+      "status": "ok",
+      "detail": "10 search candidates; candidates are not OAuth evidence."
+    }
+  ]
+}

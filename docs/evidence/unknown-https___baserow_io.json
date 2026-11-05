@@ -1,0 +1,165 @@
+{
+  "input": "https://baserow.io",
+  "at": "2026-11-05T18:13:37.867Z",
+  "elapsedMs": 77866,
+  "status": "oauth_references",
+  "coverage": {
+    "oauth": true,
+    "registration": false,
+    "permissions": true,
+    "approval": true
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "Install with Docker",
+      "url": "https://baserow.io/docs/installation/install-with-docker",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "2",
+      "title": "Baserow table of contents",
+      "url": "https://baserow.io/user-docs",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "3",
+      "title": "MCP OAuth sign-in for self-hosted Baserow",
+      "url": "https://baserow.io/docs/installation%2Fmcp-oauth",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "4",
+      "title": "Configure Google OAuth 2 single sign-on for Baserow",
+      "url": "https://baserow.io/user-docs/configure-google-for-oauth-2-sso",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "5",
+      "title": "Set up Facebook login with Baserow OAuth 2",
+      "url": "https://baserow.io/user-docs/configure-facebook-for-oauth-2-sso",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "6",
+      "title": "Baserow GitHub OAuth 2 SSO setup guide",
+      "url": "https://baserow.io/user-docs/configure-github-for-oauth-2-sso",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "7",
+      "title": "Baserow GitLab OAuth 2 SSO setup guide",
+      "url": "https://baserow.io/user-docs/configure-gitlab-for-oauth-2-sso",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "8",
+      "title": "Baserow single sign-on with OpenID Connect",
+      "url": "https://baserow.io/user-docs/configure-openid-connect-for-oauth-2-sso",
+      "provenance": "Provider-site documentation"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://baserow.io/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/llms.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/robots.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/product/application-builder",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/docs/installation/install-with-docker",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://api.baserow.io/api/redoc/",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://api.baserow.io/llms.txt",
+      "kind": "index",
+      "status": "unavailable",
+      "detail": "HTTP 404"
+    },
+    {
+      "url": "https://baserow.io/docs/installation%2Fmcp-oauth",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/configure-google-for-oauth-2-sso",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/configure-facebook-for-oauth-2-sso",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/configure-github-for-oauth-2-sso",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/configure-gitlab-for-oauth-2-sso",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/email-and-password-authentication",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/create-an-application",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/configure-openid-connect-for-oauth-2-sso",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://api.baserow.io/robots.txt",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/database-api",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/manage-workspace-permissions",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://baserow.io/user-docs/personal-api-tokens",
+      "kind": "document",
+      "status": "ok"
+    }
+  ]
+}

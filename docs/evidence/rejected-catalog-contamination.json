@@ -1,0 +1,87 @@
+{
+  "input": "Figma",
+  "at": "2026-11-05T18:12:54.045Z",
+  "elapsedMs": 34027,
+  "status": "rejected_cross_product_contamination",
+  "coverage": {
+    "oauth": true,
+    "registration": true,
+    "permissions": true,
+    "approval": true
+  },
+  "sources": [
+    {
+      "id": "1",
+      "title": "Aimfox (OAuth) - Nango Docs",
+      "url": "https://nango.dev/docs/integrations/all/aimfox-oauth",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "2",
+      "title": "Apollo OAuth - Nango Docs",
+      "url": "https://nango.dev/docs/integrations/all/apollo-oauth",
+      "provenance": "Provider-site documentation"
+    },
+    {
+      "id": "3",
+      "title": "Atlassian Service Account (OAuth 2.0) - Nango Docs",
+      "url": "https://nango.dev/docs/api-integrations/atlassian-service-account-oauth2",
+      "provenance": "Provider-site documentation"
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/packages/providers/providers.yaml",
+      "kind": "registry",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/integrations/all/figma.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/figma",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://raw.githubusercontent.com/NangoHQ/nango/master/docs/integrations/all/figma-scim.mdx",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/figma-scim",
+      "kind": "index",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/aimfox-oauth",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://www.figma.com/developers/api",
+      "kind": "document",
+      "status": "timeout",
+      "detail": "Request timed out."
+    },
+    {
+      "url": "https://nango.dev/docs/integrations/all/apollo-oauth",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/docs/api-integrations/atlassian-service-account-oauth2",
+      "kind": "document",
+      "status": "ok"
+    },
+    {
+      "url": "https://nango.dev/llms.txt",
+      "kind": "index",
+      "status": "ok"
+    }
+  ],
+  "accepted": false,
+  "reason": "A development run followed unrelated shared-catalog products. Discarded as evidence; fixed and covered by a regression test."
+}
