@@ -2604,3 +2604,10 @@ main {
 .observed-facts code {
   white-space: normal;
 }
+
+.provider-suggestions { margin: 18px 0; padding: 18px; border: 1px solid var(--line, #deded5); border-radius: 12px; background: var(--surface, #fff); }
+.provider-suggestions h3 { margin: 0 0 8px; font-size: 16px; }
+.provider-suggestions > div { margin-top: 14px; padding-top: 14px; border-top: 1px solid var(--line, #deded5); }
+.provider-suggestions small { display: block; margin-top: 5px; overflow-wrap: anywhere; }
+.provider-suggestions p { margin: 8px 0 12px; font-size: 13px; line-height: 1.6; }
+.provider-suggestions button { max-width: 100%; white-space: normal; text-align: left; }

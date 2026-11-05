@@ -36,3 +36,11 @@ A successful deployment does not establish live provider retrieval. Public revie
 - The local browser exercised the live request, saved an inaccessible-source report, and rendered recovery actions without the old terminal error. The managed preview's outgoing fetch limitation remains distinct from the successful Node retrieval checks.
 - An earlier development run that mixed unrelated shared-catalog entries was rejected, preserved explicitly as rejected evidence, fixed, and covered by a regression test.
 - Authenticated hosted generation has not been re-tested in the cloud browser; source retrieval tests and UI rendering checks are reported separately.
+
+## Provider-name discovery repair — 6 November 2026 (India)
+
+- 26 tests and strict type checking pass, including unseen-name homepage discovery, misspellings, irrelevant first-engine results, blocked search, and metadata isolation from OAuth proof.
+- Live Node identity discovery resolved `doulingo` to a possible `Duolingo` website through Wikipedia search and Wikidata website records. This was a real open-data API check, not a completed OAuth setup. See `docs/evidence/provider-identity-live.json`.
+- Direct Node retrieval of the supplied Duolingo homepage fetched content and discovery indexes but did not establish an OAuth app-registration path within its bounded run. No lack of OAuth support is inferred.
+- Unknown identity and unavailable name discovery no longer present a zero-request result as unreachable provider documentation or a completed setup guide. Earlier saved reports remain immutable; start a fresh run to use the repaired flow.
+- Local browser check: `githbu` produced a possible GitHub match, a research-report heading, separate discovery counts, and no setup-effort statistics. Confirming the match populated the canonical provider name for a new run. This checks the recovery interface; authenticated hosted generation remains unverified.

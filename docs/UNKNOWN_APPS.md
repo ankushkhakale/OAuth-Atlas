@@ -39,3 +39,9 @@ Configure `SEARXNG_URL` in the server environment, then start the local app. The
 `tests/discovery.test.ts` exercises a fictitious app absent from every registry, an external documentation host, an llms-only OAuth link, a fourth queued candidate, configured free search, API-key alternatives, inaccessible sources, cancellation, and cross-product contamination. These are deterministic regression tests, not claims about real provider availability.
 
 Real retrieval records under `docs/evidence/unknown-*.json` include the inputs, source URLs, coverage, timings, and access outcomes. They deliberately distinguish a useful incomplete report from a verified OAuth setup path. No provider app was created or approved during these checks.
+
+## Identity recovery and spelling
+
+If the OAuth-specific query cannot identify the provider, the engine searches for its homepage and tries the next search adapter when the first returns unrelated hits. Similar names from public metadata or search results are proposed for confirmation, never silently selected. An independent Wikipedia title search and Wikidata website lookup provide another discovery path for indexed entities. These open-data records are identity hints, not OAuth sources; new or private products may have no record.
+
+Unresolved provider identity, unavailable name discovery, and failed provider-document requests have separate statuses. Reports show discovery attempts separately from content requests. A zero-document-request result is a research report with identity recovery actions, not an OAuth setup guide or an invented three-step connection plan. Possible matches still require confirmation, and provider documentation must establish OAuth support.

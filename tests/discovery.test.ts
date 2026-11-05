@@ -241,3 +241,106 @@ test("bundled name hints still work when the live registry and search services a
   assert.equal(requests.length, 0);
   assert.match(attempts[0].detail || "", /Bundled public discovery metadata/);
 });
+
+test("misspelled unknown names suggest search-discovered providers without silently crawling them", async () => {
+  const requests: string[] = [];
+  const fixtures: Record<string, Fixture> = {};
+  for (const query of ["NebluaDesk API OAuth app registration documentation", "NebluaDesk official website"])
+    fixtures[`https://search.example.net/search?q=${new URLSearchParams({q: query}).toString().slice(2)}&format=json`] = {
+      type: "application/json", body: JSON.stringify({ results: [{ url: "https://nebuladesk.example/", title: "NebulaDesk official website" }] }),
+    };
+  const g = await investigate("NebluaDesk", () => {}, AbortSignal.timeout(5000), {
+    ...opts, searxngURL: "https://search.example.net", fetcher: transport(fixtures, requests),
+  });
+  assert.equal(g.research?.status, "provider_unresolved");
+  assert.equal(g.research?.requests, 0);
+  assert.equal(g.research?.suggestions?.[0]?.input, "https://nebuladesk.example/");
+  assert.ok(!requests.includes("https://nebuladesk.example/"));
+  assert.equal(g.sources.length, 0);
+  assert.equal(g.steps.length, 1);
+});
+
+test("a general homepage search resolves an unknown provider when the OAuth query has no matches", async () => {
+  const fixtures: Record<string, Fixture> = {
+    "https://search.example.net/search?q=NewOrbit+API+OAuth+app+registration+documentation&format=json": {
+      type: "application/json", body: JSON.stringify({results: []}),
+    },
+    "https://search.example.net/search?q=NewOrbit+official+website&format=json": {
+      type: "application/json", body: JSON.stringify({results: [{url: "https://neworbit.example.org/", title: "NewOrbit"}]}),
+    },
+    "https://neworbit.example.org/": {body: '<a href="/developers/authorization">OAuth developer documentation</a>'},
+    "https://neworbit.example.org/developers/authorization": {body: oauth},
+  };
+  const g = await investigate("NewOrbit", () => {}, AbortSignal.timeout(5000), {
+    ...opts, searxngURL: "https://search.example.net", fetcher: transport(fixtures),
+  });
+  assert.equal(g.research?.status, "oauth_documented");
+  assert.ok(g.sources.some(s => s.url.endsWith("/developers/authorization")));
+});
+
+test("a blocked search is reported as discovery failure, not unreachable documentation", async () => {
+  const g = await investigate("TotallyNewProduct", () => {}, AbortSignal.timeout(5000), {
+    ...opts, fetcher: transport({}),
+  });
+  assert.equal(g.research?.status, "discovery_unavailable");
+  assert.equal(g.research?.requests, 0);
+  assert.ok(g.research?.attempts.filter(a => a.kind === "search").length >= 2);
+  assert.match(g.summary, /No provider documentation was requested/);
+  const {guideMarkdown} = await import("../lib/guide.ts");
+  assert.match(guideMarkdown(g), /Research report/);
+  assert.doesNotMatch(guideMarkdown(g), /— OAuth setup guide/);
+});
+
+test("near spelling suggestions are generic, and short or unrelated names are rejected", async () => {
+  const {providerSuggestions} = await import("../lib/discovery.ts");
+  assert.ok(providerSuggestions("githbu").some(s => /github/i.test(s.name)));
+  assert.equal(providerSuggestions("app", [{url:"https://apt.example.com/", label:"Apt"}]).length, 0);
+  assert.equal(providerSuggestions("NebluaDesk", [{url:"https://unrelated.example.com/", label:"NebulaDesk"}]).length, 0);
+});
+
+test("a transposed search-discovered name is proposed only as an unverified identity", async () => {
+  const {providerSuggestions, identityMatches} = await import("../lib/discovery.ts");
+  const hit = {url: "https://www.duolingo.com/", label: "Duolingo"};
+  assert.equal(identityMatches("doulingo", hit), false);
+  const suggestions = providerSuggestions("doulingo", [hit]);
+  assert.equal(suggestions[0]?.name, "Duolingo");
+  assert.match(suggestions[0]?.reason || "", /unverified/);
+});
+
+test("unrelated first-engine hits do not suppress a matching fallback search result", async () => {
+  const {searchDocs, identityMatches} = await import("../lib/discovery.ts");
+  const query = "NewOrbit official website";
+  const attempts: import("../lib/research-fetch.ts").Attempt[] = [];
+  const hits = await searchDocs(query, transport({
+    [`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`]: {
+      body: '<a href="https://unrelated.example/">Other product</a>',
+    },
+    [`https://www.bing.com/search?format=rss&q=${encodeURIComponent(query)}`]: {
+      type: "application/rss+xml", body: '<rss><channel><item><title>NewOrbit</title><link>https://neworbit.example/</link></item></channel></rss>',
+    },
+  }), AbortSignal.timeout(5000), attempts, undefined, h => identityMatches("NewOrbit", h));
+  assert.equal(hits[0]?.url, "https://neworbit.example/");
+  assert.equal(attempts.length, 2);
+});
+
+test("open-data identity fallback finds a provider website without treating metadata as OAuth proof", async () => {
+  const fixtures: Record<string, Fixture> = {
+    "https://en.wikipedia.org/w/api.php?action=query&list=search&srsearch=NebluaDesk&srinfo=suggestion&format=json&srlimit=3": {
+      type: "application/json", body: JSON.stringify({query: {search: [{title:"NebulaDesk"}]}}),
+    },
+    "https://www.wikidata.org/w/api.php?action=wbgetentities&sites=enwiki&titles=NebulaDesk&props=labels%7Cclaims&languages=en&format=json": {
+      type: "application/json", body: JSON.stringify({entities: {Q123: {
+        labels:{en:{value:"NebulaDesk"}}, claims:{P856:[{rank:"normal",mainsnak:{datavalue:{value:"https://nebuladesk.example/"}}}]},
+      }}}),
+    },
+  };
+  const requests: string[] = [];
+  const g = await investigate("NebluaDesk", () => {}, AbortSignal.timeout(5000), {
+    ...opts, fetcher: transport(fixtures, requests),
+  });
+  assert.equal(g.research?.status, "provider_unresolved");
+  assert.equal(g.research?.suggestions?.[0]?.name, "NebulaDesk");
+  assert.equal(g.sources.length, 0);
+  assert.equal(g.research?.requests, 0);
+  assert.ok(!requests.includes("https://nebuladesk.example/"));
+});

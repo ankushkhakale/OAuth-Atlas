@@ -20,7 +20,7 @@ export type ResearchPage = {
 };
 export type Attempt = {
   url: string;
-  kind: "document" | "index" | "search" | "registry";
+  kind: "document" | "index" | "search" | "registry" | "identity";
   status: "ok" | "blocked" | "unavailable" | "timeout" | "skipped";
   detail?: string;
 };

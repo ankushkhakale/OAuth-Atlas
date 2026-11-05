@@ -230,6 +230,7 @@ export async function searchDocs(
   signal: AbortSignal,
   attempts: Attempt[],
   searxngURL?: string,
+  accept?: (candidate: { url: string; label: string }) => boolean,
 ) {
   const q = encodeURIComponent(query);
   const adapters: { engine: "bing" | "duckduckgo" | "searxng"; url: string }[] =
@@ -278,19 +279,22 @@ export async function searchDocs(
           return [];
         }
       });
+      const bounded = hits.slice(0, 40);
+      const accepted = accept ? bounded.filter(accept) : bounded;
       attempts.push({
         url: new URL(url).origin,
         kind: "search",
         status: "ok",
-        detail: `${hits.length} search candidates; candidates are not OAuth evidence.`,
+        detail: `${hits.length} search candidates; ${accepted.length} relevant candidates for ${query}. Candidates are not OAuth evidence.`,
       });
-      if (hits.length) return hits;
-    } catch {
+      // Irrelevant results must not prevent trying the next search adapter.
+      if (accepted.length) return accepted;
+    } catch (error) {
       attempts.push({
         url: new URL(url).origin,
         kind: "search",
-        status: "unavailable",
-        detail: "Free search unavailable.",
+        status: signal.aborted ? "timeout" : "unavailable",
+        detail: `Search unavailable for ${query}: ${error instanceof Error ? error.message.slice(0, 120) : "network failure"}.`,
       });
     }
   }
@@ -310,4 +314,127 @@ export function identityMatches(
       label.includes(token + "api") ||
       label.includes(token + "developer"))
   );
+}
+
+export type ProviderSuggestion = {
+  name: string;
+  input: string;
+  url?: string;
+  reason: string;
+};
+
+// Optimal-string-alignment distance includes adjacent transpositions. It only
+// proposes identities; it never silently changes the requested provider.
+function spellingDistance(a: string, b: string) {
+  const d = Array.from({ length: a.length + 1 }, (_, i) =>
+    Array.from({ length: b.length + 1 }, (_, j) => i ? (j ? 0 : i) : j),
+  );
+  for (let i = 1; i <= a.length; i++)
+    for (let j = 1; j <= b.length; j++) {
+      d[i][j] = Math.min(d[i - 1][j] + 1, d[i][j - 1] + 1,
+        d[i - 1][j - 1] + Number(a[i - 1] !== b[j - 1]));
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1])
+        d[i][j] = Math.min(d[i][j], d[i - 2][j - 2] + 1);
+    }
+  return d[a.length][b.length];
+}
+function similarName(input: string, candidate: string) {
+  const a = normalized(input), b = normalized(candidate);
+  return a.length >= 5 && b.length >= 5 && a !== b &&
+    Math.abs(a.length - b.length) <= 2 &&
+    spellingDistance(a, b) <= (a.length >= 9 ? 2 : 1);
+}
+export function providerSuggestions(
+  input: string,
+  hits: { url: string; label: string }[] = [],
+  includeBundled = true,
+): ProviderSuggestion[] {
+  if (/[:/.]/.test(input) || normalized(input).length > 80) return [];
+  const suggestions: ProviderSuggestion[] = [];
+  for (const [key, row] of (includeBundled ? Object.entries(snapshot.providers).sort(([a], [b]) => a.length - b.length) : [])) {
+    if (!similarName(input, key) && !similarName(input, row.display_name || "")) continue;
+    suggestions.push({ name: (row.display_name || key).replace(/\([^)]*\)/g, "").trim(), input: key,
+      reason: "Similar name in discovery metadata; confirm the intended provider." });
+  }
+  for (const hit of hits) {
+    try {
+      const url = publicURL(hit.url);
+      const domain = siteDomain(url.href).split(".")[0];
+      if (!similarName(input, domain)) continue;
+      // A matching title and domain reduce unrelated near-name suggestions.
+      if (!normalized(hit.label).includes(normalized(domain))) continue;
+      const name = hit.label.match(/^[\p{L}\p{N} -]+/u)?.[0]?.trim() || domain;
+      suggestions.push({ name: name.slice(0, 70), input: url.href, url: url.href,
+        reason: "Similar name in a search result; website ownership and OAuth support are unverified." });
+    } catch {}
+  }
+  const distinct = new Map<string, ProviderSuggestion>();
+  for (const suggestion of suggestions) {
+    const key = suggestion.url ? siteDomain(suggestion.url) : normalized(suggestion.name);
+    if (!distinct.has(key)) distinct.set(key, suggestion);
+  }
+  return [...distinct.values()].slice(0, 3);
+}
+
+// Independent, open-data identity fallback. These records locate a possible
+// website; neither Wikipedia text nor Wikidata claims become OAuth evidence.
+export async function knowledgeSuggestions(
+  input: string, transport: Transport, signal: AbortSignal, attempts: Attempt[],
+): Promise<ProviderSuggestion[]> {
+  if (normalized(input).length > 80) return [];
+  const readJSON = async (url: URL) => {
+    const response = await transport(url.href, {
+      headers: { "User-Agent": "OAuthAtlas/2.1 (https://github.com/ankushkhakale/OAuth-Atlas)" },
+      signal: AbortSignal.any([signal, AbortSignal.timeout(10000)]),
+    });
+    if (!response.ok) { await response.body?.cancel(); throw new Error(`HTTP ${response.status}`); }
+    return JSON.parse(await readBounded(response, 800_000));
+  };
+  try {
+    const searchURL = new URL("https://en.wikipedia.org/w/api.php");
+    searchURL.search = new URLSearchParams({action: "query", list: "search", srsearch: input,
+      srinfo: "suggestion", format: "json", srlimit: "3"}).toString();
+    const search = await readJSON(searchURL) as {query?: {search?: {title?: string}[]}};
+    const titles = (search.query?.search || []).flatMap(row =>
+      typeof row.title === "string" && row.title.length <= 100 &&
+      (normalized(row.title) === normalized(input) || similarName(input, row.title)) ? [row.title] : []);
+    attempts.push({url: searchURL.origin, kind: "identity", status: "ok",
+      detail: `${titles.length} possible identity matches from Wikipedia; not OAuth evidence.`});
+    if (!titles.length) return [];
+    const entitiesURL = new URL("https://www.wikidata.org/w/api.php");
+    entitiesURL.search = new URLSearchParams({action: "wbgetentities", sites: "enwiki", titles: titles.join("|"),
+      props: "labels|claims", languages: "en", format: "json"}).toString();
+    type Entity = {labels?: {en?: {value?: string}}; claims?: {P856?: {
+      rank?: string; qualifiers?: {P582?: unknown}; mainsnak?: {datavalue?: {value?: unknown}};
+    }[]}};
+    const data = await readJSON(entitiesURL) as {entities?: Record<string, Entity>};
+    const candidates: ProviderSuggestion[] = [];
+    for (const [id, entity] of Object.entries(data.entities || {})) {
+      const label = entity.labels?.en?.value;
+      if (!/^Q\d+$/.test(id) || !label ||
+        !(normalized(label) === normalized(input) || similarName(input, label))) continue;
+      for (const claim of [...(entity.claims?.P856 || [])].sort((a, b) => Number(b.rank === "preferred") - Number(a.rank === "preferred"))) {
+        const value = claim.mainsnak?.datavalue?.value;
+        if (claim.rank === "deprecated" || claim.qualifiers?.P582 || typeof value !== "string") continue;
+        try {
+          const url = publicURL(value).href;
+          candidates.push({name: label, input: url, url,
+            reason: "Website listed in Wikidata. Confirm the intended provider; this is not proof of OAuth support."});
+        } catch {}
+      }
+    }
+    attempts.push({url: entitiesURL.origin, kind: "identity", status: "ok",
+      detail: `${candidates.length} candidate websites from public Wikidata records; not OAuth evidence.`});
+    const unique = new Map<string, ProviderSuggestion>();
+    for (const candidate of candidates) {
+      const domain = siteDomain(candidate.url!);
+      if (!unique.has(domain)) unique.set(domain, candidate);
+    }
+    return [...unique.values()].slice(0, 3);
+  } catch (error) {
+    attempts.push({url: "https://en.wikipedia.org", kind: "identity",
+      status: signal.aborted ? "timeout" : "unavailable",
+      detail: `Open-data identity discovery unavailable: ${error instanceof Error ? error.message.slice(0, 120) : "network failure"}.`});
+    return [];
+  }
 }

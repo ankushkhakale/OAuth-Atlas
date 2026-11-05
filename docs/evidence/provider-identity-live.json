@@ -1,0 +1,26 @@
+{
+  "checkedAt": "2026-11-05T21:26:34.241Z",
+  "input": "doulingo",
+  "suggestions": [
+    {
+      "name": "Duolingo",
+      "input": "https://en.duolingo.com/",
+      "url": "https://en.duolingo.com/",
+      "reason": "Website listed in Wikidata. Confirm the intended provider; this is not proof of OAuth support."
+    }
+  ],
+  "attempts": [
+    {
+      "url": "https://en.wikipedia.org",
+      "kind": "identity",
+      "status": "ok",
+      "detail": "1 possible identity matches from Wikipedia; not OAuth evidence."
+    },
+    {
+      "url": "https://www.wikidata.org",
+      "kind": "identity",
+      "status": "ok",
+      "detail": "26 candidate websites from public Wikidata records; not OAuth evidence."
+    }
+  ]
+}

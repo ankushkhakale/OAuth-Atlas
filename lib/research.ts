@@ -13,6 +13,9 @@ import {
   searchDocs,
   scoreLink,
   identityMatches,
+  providerSuggestions,
+  knowledgeSuggestions,
+  type ProviderSuggestion,
 } from "./discovery.ts";
 export {
   ResearchError,
@@ -370,6 +373,7 @@ export async function investigate(
   let policyPass = false;
   let resolvedName = input;
   let discovery = "User-supplied website";
+  let suggestions: ProviderSuggestion[] = [];
   const maxDocuments = Math.max(1, Math.min(options.maxDocuments || 16, 20));
   const maxRequests = Math.max(4, Math.min(options.maxRequests || 36, 40));
   const enqueue = (
@@ -478,13 +482,21 @@ export async function investigate(
         "Resolved the provider using public discovery metadata; checking linked documentation live",
       );
     } else {
+      const relevant = (hit: { url: string; label: string }) =>
+        identityMatches(input, hit) || providerSuggestions(input, [hit], false).some(s => s.url === hit.url);
       const hits = await searchDocs(
         `${input} API OAuth app registration documentation`,
-        transport,
-        crawlSignal,
-        attempts,
-        options.searxngURL,
+        transport, crawlSignal, attempts, options.searxngURL, relevant,
       );
+      if (!hits.some(h => identityMatches(input, h)) && !crawlSignal.aborted) {
+        progress("Looking for the provider website before searching deeper documentation");
+        const homepages = await searchDocs(
+          `${input} official website`, transport, crawlSignal, attempts,
+          options.searxngURL, relevant,
+        );
+        hits.push(...homepages);
+      }
+      suggestions = providerSuggestions(input, hits);
       searched = true;
       const matches = hits
         .filter((h) => identityMatches(input, h))
@@ -492,6 +504,10 @@ export async function investigate(
           (a, b) =>
             scoreLink(b.url + " " + b.label) - scoreLink(a.url + " " + a.label),
         );
+      if (!matches.length && !suggestions.length && !crawlSignal.aborted) {
+        progress("Checking independent open-data identity records for a possible provider website");
+        suggestions = await knowledgeSuggestions(input, transport, crawlSignal, attempts);
+      }
       for (const hit of matches.slice(0, 4))
         enqueue(
           hit.url,
@@ -671,8 +687,12 @@ export async function investigate(
   const evidence = pages.map(evidenceFor);
   const hasSetup = evidence.some((e) => e.setup);
   const hasOAuth = evidence.some((e) => e.oauth);
-  const status = !pages.length
-    ? "unreachable"
+  const searchAttempts = attempts.filter(a => a.kind === "search" || a.kind === "identity");
+  const discoveryUnavailable = searchAttempts.length > 0 && searchAttempts.every(a => a.status !== "ok");
+  const status = reads === 0
+    ? suggestions.length ? "provider_unresolved"
+      : discoveryUnavailable ? "discovery_unavailable" : "provider_unresolved"
+    : !pages.length ? "unreachable"
     : hasSetup
       ? "oauth_documented"
       : hasOAuth
@@ -685,6 +705,14 @@ export async function investigate(
     status,
     discovery,
     attempts,
+    suggestions: reads === 0 ? suggestions : [],
+    diagnosis: reads === 0
+      ? suggestions.length
+        ? "A possible provider match was found. Confirm it before documentation research starts."
+        : discoveryUnavailable
+          ? "Name discovery could not complete because the search services were blocked, timed out, or unavailable. No provider documentation was requested."
+          : "Search did not establish a matching provider website. No provider documentation was requested. Check the name or supply its homepage."
+      : undefined,
     coverage: coverageFor(pages),
     documents: pages.length,
     requests: reads,
@@ -694,6 +722,19 @@ export async function investigate(
       pages.length >= maxDocuments,
     facts: observedFacts(guide, pages),
   };
+  if (reads === 0) {
+    guide.summary = guide.research.diagnosis!;
+    guide.production = "Resolve the provider before planning OAuth setup";
+    guide.steps = [{
+      title: suggestions.length ? "Confirm the intended provider" : "Find the provider website",
+      detail: suggestions.length
+        ? "Choose a possible match below, or enter the intended provider’s website. No match is selected automatically."
+        : "Retry name discovery, check the spelling, or supply the homepage. You do not need to find an OAuth documentation URL.",
+      owner: "You", level: "unknown", sources: [],
+    }];
+    guide.blockers = [{ title: discoveryUnavailable ? "Search discovery unavailable" : "Provider identity unconfirmed",
+      detail: guide.research.diagnosis!, owner: "Agent", level: "unknown", sources: [] }];
+  }
   guide.tested.push(
     `${reads} bounded page/index requests; ${pages.length} content pages retained. Discovery hints and indexes were not treated as OAuth proof.`,
   );

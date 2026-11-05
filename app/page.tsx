@@ -460,7 +460,8 @@ export default function App() {
                   <Mark g={guide} />
                   <div>
                     <div className="eyebrow">
-                      {guide.category} <span> / </span> OAUTH SETUP GUIDE
+                      {guide.category} <span> / </span>{" "}
+                      {guide.supported === "documented" ? "OAUTH SETUP GUIDE" : "RESEARCH REPORT"}
                     </div>
                     <h1>{guide.name}</h1>
                   </div>
@@ -538,11 +539,14 @@ export default function App() {
                                 "Another authentication method was found",
                               needs_review: "OAuth setup needs more evidence",
                               unreachable: "Documentation could not be reached",
+                              provider_unresolved: "Confirm the provider",
+                              discovery_unavailable: "Name discovery is unavailable",
                             } as const
                           )[guide.research.status]
                         }
                       </h2>
                       <p>
+                        {guide.research.attempts.filter(a => a.kind === "search" || a.kind === "registry" || a.kind === "identity").length} discovery attempts ·{" "}
                         {guide.research.documents} content pages inspected ·{" "}
                         {guide.research.requests} page/index requests
                         {guide.research.limited
@@ -559,11 +563,24 @@ export default function App() {
                   </div>
                   {guide.supported !== "documented" && (
                     <p className="outcome-note">
-                      This is an incomplete research report, not a finding that
-                      OAuth is unsupported. Add the provider’s homepage or
-                      developer portal to continue; you do not need to locate a
-                      deep OAuth URL yourself.
+                      {guide.research.diagnosis || "This is an incomplete research report, not a finding that OAuth is unsupported. Add the provider’s homepage or developer portal to continue; you do not need to locate a deep OAuth URL yourself."}
                     </p>
+                  )}
+                  {!!guide.research.suggestions?.length && (
+                    <div className="provider-suggestions">
+                      <h3>Did you mean one of these?</h3>
+                      <p>These are possible matches, not verified integrations. Choose the intended provider to continue.</p>
+                      {guide.research.suggestions.map(suggestion => (
+                        <div key={suggestion.input}>
+                          <b>{suggestion.name}</b>
+                          {suggestion.url && <small>{new URL(suggestion.url).hostname}</small>}
+                          <p>{suggestion.reason}</p>
+                          <button className="secondary" onClick={() => startResearch(suggestion.input)}>
+                            Confirm & research {suggestion.name} <ArrowRight size={14} />
+                          </button>
+                        </div>
+                      ))}
+                    </div>
                   )}
                   <div className="coverage-grid">
                     {Object.entries(guide.research.coverage).map(
@@ -592,14 +609,14 @@ export default function App() {
                   {guide.supported !== "documented" && (
                     <button
                       className="secondary"
-                      onClick={() => startResearch(guide.name)}
+                      onClick={() => startResearch()}
                     >
                       Continue with a provider website <ArrowRight size={14} />
                     </button>
                   )}
                 </section>
               )}
-              <div className="stats-grid">
+              {guide.research?.requests !== 0 && <div className="stats-grid">
                 <div className="stat">
                   <span>SETUP COMPLEXITY</span>
                   <strong
@@ -621,14 +638,14 @@ export default function App() {
                   <strong>{guide.wait}</strong>
                   <p>{guide.waitNote}</p>
                 </div>
-              </div>
+              </div>}
               <div
                 className="guide-tabs"
                 role="tablist"
                 aria-label="Guide sections"
               >
                 {[
-                  ["plan", "Setup plan", ListChecks],
+                  ["plan", guide.supported === "documented" ? "Setup plan" : "Research next steps", ListChecks],
                   ["blockers", "Blockers", AlertTriangle],
                   ["evidence", "Evidence", ShieldCheck],
                   ["handoff", "Agent & you", Terminal],
@@ -652,7 +669,7 @@ export default function App() {
                     <>
                       <div className="section-head">
                         <div>
-                          <h2>Your path to a working connection</h2>
+                          <h2>{guide.supported === "documented" ? "Your path to a working connection" : "Continue the research"}</h2>
                           <p>
                             Follow in order. Your checklist stays on this
                             device.
