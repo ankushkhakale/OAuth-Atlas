@@ -2611,3 +2611,33 @@ main {
 .provider-suggestions small { display: block; margin-top: 5px; overflow-wrap: anywhere; }
 .provider-suggestions p { margin: 8px 0 12px; font-size: 13px; line-height: 1.6; }
 .provider-suggestions button { max-width: 100%; white-space: normal; text-align: left; }
+
+/* Searchable provider directory */
+.directory-tabs,.directory-quick,.directory-results,.directory-pagination{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.directory-tabs{margin:20px 0 12px}
+.directory-tabs button,.directory-quick button{border:1px solid #dddcd4;border-radius:8px;background:transparent;padding:9px 13px;color:inherit;cursor:pointer;font-size:13px}
+.directory-tabs button.selected,.directory-quick button.selected{background:#e8eddf;border-color:#aab79b;color:#344326}
+.directory-explainer{color:#76796d;font-size:13px;line-height:1.7;max-width:880px}
+.directory-explainer b{color:#41483b;font-weight:500}
+.directory-toolbar{flex-wrap:wrap;margin-bottom:14px}
+.directory-toolbar .search-box{min-width:min(100%,300px)}
+.directory-toolbar>select,.directory-variant select{color:inherit;background:#fffefa;border:1px solid #dedfd6;border-radius:8px;padding:12px;font:inherit;font-size:13px;max-width:100%}
+.directory-quick{margin-bottom:12px}
+.directory-quick button{font-size:12px;padding:7px 10px;border-radius:20px}
+.directory-results{justify-content:space-between;margin:20px 0 14px;color:#777c70;font-size:13px}
+.directory-card{display:flex;flex-direction:column;min-width:0}
+.directory-mark{background:#e9ece3;color:#4c5c3b}
+.directory-badge{font-size:10px;color:#777b6f;margin-left:auto;white-space:nowrap}
+.directory-badge.reviewed{color:#4c663b}
+.directory-tags{display:flex;gap:5px;flex-wrap:wrap;min-height:22px;margin-top:10px}
+.directory-tags span{border-radius:5px;background:#f1f2eb;color:#6a745c;padding:3px 6px;font-size:10px}
+.directory-card .card-summary{flex:1;min-height:62px}
+.directory-variant{display:grid;gap:6px;font-size:11px;color:#777c70;margin-bottom:16px}
+.directory-variant select{width:100%;padding:8px;font-size:12px}
+.directory-guide{margin-bottom:14px}
+.directory-card .card-footer{gap:10px;flex-wrap:wrap;margin-top:auto}
+.directory-card .card-footer a{display:inline-flex;align-items:center;gap:5px;color:#777c70;font-size:11px}
+.directory-pagination{justify-content:center;margin-top:28px;font-size:13px}
+.directory-pagination button:disabled{opacity:.4;cursor:default}
+.directory-browser button:focus-visible,.directory-browser select:focus-visible{outline:2px solid #657a50;outline-offset:3px}
+@media(max-width:650px){.directory-toolbar .search-box{flex-basis:100%}.directory-toolbar>select{flex:1;min-width:0;width:45%;padding:10px 6px}.directory-tabs button{font-size:11px;padding:8px}.directory-pagination{gap:8px}}

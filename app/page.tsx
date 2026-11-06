@@ -31,6 +31,8 @@ import {
   Globe2,
 } from "lucide-react";
 import { catalog } from "../lib/catalog";
+import { appDirectory } from "../lib/app-directory";
+import { AppDirectory } from "../components/app-directory";
 import { guideMarkdown, type Guide, type Step } from "../lib/guide";
 
 function requestId() {
@@ -355,7 +357,7 @@ export default function App() {
             onClick={() => navigate("library")}
           >
             <Layers3 size={18} /> App library{" "}
-            <span className="nav-count">4</span>
+            <span className="nav-count">{appDirectory.length}</span>
           </button>
           <button
             className={active === "saved" ? "nav active" : "nav"}
@@ -1119,10 +1121,7 @@ export default function App() {
               <div className="wide-note">
                 <h2>What this slice proves</h2>
                 <p>
-                  Four different provider paths, official-source review, live
-                  documentation retrieval, durable share links, and a checklist
-                  you can export. It is designed to grow to 100 apps; it does
-                  not claim to contain 100 guides.
+                  Browse {appDirectory.length} directory entries and {catalog.length} source-reviewed guides. Directory listings are discovery starting points; they do not establish OAuth support or completed integration tests. Live research preserves evidence and unresolved requirements.
                 </p>
                 <p>
                   Free search endpoints may throttle or block requests. A direct
@@ -1320,10 +1319,10 @@ export default function App() {
               {view === "library" && (
                 <div className="library-strip">
                   <span>
-                    <ShieldCheck size={16} /> <b>4</b> researched apps
+                    <Layers3 size={16} /> <b>{appDirectory.length}</b> apps to explore
                   </span>
                   <span>
-                    <FileText size={16} /> Requirements linked to sources
+                    <ShieldCheck size={16} /> {catalog.length} source-reviewed guides
                   </span>
                   <span>
                     <Clock3 size={16} /> Effort ≠ approval wait
@@ -1343,13 +1342,13 @@ export default function App() {
                           : "Explore the app library"}
                       </h2>
                       <span className="number-pill">
-                        {view === "saved" ? saved.length : catalog.length}
+                        {view === "saved" ? saved.length : appDirectory.length}
                       </span>
                     </div>
                     <p>
                       {view === "saved"
                         ? "Pick up where you left off."
-                        : "Different providers. Different paths to production."}
+                        : "Find a platform, keep a shortlist, and research its integration path."}
                     </p>
                   </div>
                   {view === "library" && (
@@ -1361,6 +1360,12 @@ export default function App() {
                     </button>
                   )}
                 </div>
+                {view === "library" ? (
+                  <AppDirectory onResearch={startResearch} onGuide={id => {
+                    const match = catalog.find(g => g.id === id);
+                    if (match) openGuide(match);
+                  }} />
+                ) : <>
                 <div className="library-toolbar">
                   <label className="search-box">
                     <Search size={18} />
@@ -1485,6 +1490,7 @@ export default function App() {
                     </button>
                   </div>
                 )}
+                </>}
               </section>
               {view === "library" && (
                 <section className="research-banner">
@@ -1508,7 +1514,7 @@ export default function App() {
               )}
               <footer className="page-footer">
                 <span>Built for the work before “Connect”.</span>
-                <span>4 guides today. A library designed to grow.</span>
+                <span>{appDirectory.length} apps to explore · {catalog.length} reviewed guides</span>
               </footer>
             </>
           )}

@@ -86,3 +86,9 @@ pnpm build
 ## License
 
 MIT for authored code. Third-party dependencies, Qwen model weights, and provider documentation retain their respective licenses and terms. Source excerpts and links are evidence, not a redistribution of whole provider documents.
+
+## Browse the app directory
+
+The library now exposes 908 named apps and API products across 24 categories from the current bundled snapshot, including 29 entries in the Indian-platform collection. It groups authentication variants without dropping their individual research starting points. Search by name, category, ecosystem, or variant; filter collections; pin apps locally; and browse 24 results per page.
+
+Four source-reviewed guides remain available. Other entries are labelled **Research available** and start live research; directory membership does not establish OAuth support, setup requirements, or a tested integration. Public registry notes are labelled as discovery links. The underlying metadata retains its provenance in `data/NOTICE.md`; categories and collection tags are editorial navigation aids. Pins use browser-local storage and do not synchronize across devices.

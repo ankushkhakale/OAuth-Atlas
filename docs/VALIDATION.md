@@ -44,3 +44,10 @@ A successful deployment does not establish live provider retrieval. Public revie
 - Direct Node retrieval of the supplied Duolingo homepage fetched content and discovery indexes but did not establish an OAuth app-registration path within its bounded run. No lack of OAuth support is inferred.
 - Unknown identity and unavailable name discovery no longer present a zero-request result as unreachable provider documentation or a completed setup guide. Earlier saved reports remain immutable; start a fresh run to use the repaired flow.
 - Local browser check: `githbu` produced a possible GitHub match, a research-report heading, separate discovery counts, and no setup-effort statistics. Confirming the match populated the canonical provider name for a new run. This checks the recovery interface; authenticated hosted generation remains unverified.
+
+## Expanded directory — 6 November 2026 (India)
+
+- Current directory: 908 named apps/API products across 24 categories, with 29 Indian-platform entries and four reviewed-guide links. This is not 908 completed OAuth guides or verified integrations.
+- All 1,116 bundled provider records retain their research starting points; display-name grouping combines authentication variants. Eleven additional provider documentation/website links add regional variety.
+- 32 Node tests, strict type checking, production build, and diff whitespace checks passed. Directory tests cover discovery-record preservation, reviewed-guide boundaries, cross-category and regional coverage, multiword/variant search, pinned selection, and HTTPS discovery links.
+- The cloud-browser preview could not complete: an initial connection failure was followed by a browser policy block when acquiring the error page. No policy workaround was attempted. Visual layout, pin persistence through reload, and browser click-through remain unverified for this change.
