@@ -1,0 +1,33 @@
+{
+  "checkedAt": "2026-11-06T18:02:52.069578+00:00",
+  "site": "https://oauth-atlas-ankush.floralkite4.chatgpt.site/",
+  "access": "public, no login",
+  "http": {
+    "reviewedGuide": "github",
+    "researchFrames": 11,
+    "outcome": "oauth_documented",
+    "documents": 5,
+    "requests": 6,
+    "sources": [
+      {
+        "title": "OAuth 2.0 authentication",
+        "url": "https://linear.app/developers/oauth-2-0-authentication"
+      },
+      {
+        "title": "OAuth actor authorization",
+        "url": "https://linear.app/developers/oauth-actor-authorization"
+      }
+    ]
+  },
+  "browser": {
+    "anonymousLibraryRendered": true,
+    "gmailScopeLensChanged": true,
+    "gmailSavedAndChecklistSurvivedReload": true,
+    "linearResearchCompleted": true,
+    "linearReportAndChecklistSurvivedReload": true,
+    "copyReportSuccessToastObserved": true,
+    "clipboardBytesIndependentlyVerified": false,
+    "mobileViewportChecked": false,
+    "downloadContentsVerified": false
+  }
+}
