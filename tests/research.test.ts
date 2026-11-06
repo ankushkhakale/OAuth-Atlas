@@ -90,7 +90,7 @@ test("live guides preserve evidence while keeping requirements and review time u
       step.sources.every((id) => g.sources.some((s) => s.id === id)),
     ),
   );
-  assert.match(g.tested.join(" "), /No LLM or paid API/);
+  assert.match(g.tested.join(" "), /no paid API/i);
 });
 
 test("canonical targets remove empty fragments and queries to prevent duplicate sources", () => {

@@ -47,7 +47,7 @@
     "dist",
     ".vinext",
     ".wrangler",
-    ".sites-runtime",
+    ".runtime",
     "outputs",
     "work"
   ]

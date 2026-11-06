@@ -9,3 +9,5 @@ Nango's source repository is source-available under Elastic License 2.0, not an 
 Upstream license: https://github.com/NangoHQ/nango/blob/master/LICENSE
 
 Refresh with `pnpm discovery:refresh`; the snapshot records the source hash and capture time. A known provider's discovery hints remain available if GitHub or public search is temporarily unavailable. New providers can still resolve through live registry/search or a supplied homepage.
+
+The public snapshot omits three provider records from the upstream capture. The source hash refers to the original upstream input; this file is a curated subset. Refreshing from upstream may change its contents.

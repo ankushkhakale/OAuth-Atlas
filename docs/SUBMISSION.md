@@ -1,6 +1,5 @@
 # OAuth Atlas — submission pack
 
-Demo: https://oauth-atlas-ankush.floralkite4.chatgpt.site
 
 Source: https://github.com/ankushkhakale/OAuth-Atlas
 

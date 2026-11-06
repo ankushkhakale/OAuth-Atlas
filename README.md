@@ -2,11 +2,10 @@
 
 Find the setup path before building an OAuth integration. Atlas explains provider registration, permissions, launch blockers, human handoffs, and the difference between hands-on work and provider approval time.
 
-**[Live demo](https://oauth-atlas-ankush.floralkite4.chatgpt.site)** · [Reviewer walkthrough](docs/SUBMISSION.md) · [Validation](docs/VALIDATION.md)
 
 ## What you can do
 
-- Browse **908 apps and API products in 24 categories**, including 29 Indian-platform entries. Directory entries are discovery starting points, not tested integrations.
+- Browse **900+ apps and API products in 24 categories**, including 29 Indian-platform entries. Directory entries are discovery starting points, not tested integrations.
 - Read four source-reviewed examples: **GitHub, Slack, Gmail, and Notion**. Compare their launch gates and change Gmail's read/send scope lens.
 - Research another app by name or provider homepage. Follow public docs, linked developer sites, llms.txt, sitemaps and public authorization metadata.
 - Inspect sources, coverage, access failures, uncertainties, and the next practical action. Missing evidence never becomes a claim that OAuth is unsupported.

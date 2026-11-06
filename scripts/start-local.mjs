@@ -1,3 +1,4 @@
+import "./runtime-env.mjs";
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
 import { spawn } from "node:child_process";
 import path from "node:path";
