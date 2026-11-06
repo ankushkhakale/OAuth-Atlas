@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { ArrowRight, Bookmark, ChevronLeft, ChevronRight, ExternalLink, Search, X } from "lucide-react";
-import { appDirectory, directoryCategories, directoryCollections, findDirectoryApps, type DirectoryApp } from "../lib/app-directory";
+import { appDirectory, directoryCategories, directoryCollections, findDirectoryApps, type DirectoryApp } from "../lib/catalog/directory";
 const PAGE_SIZE = 24;
 function DirectoryCard({app,pinned,onPin,onResearch,onGuide}: {
   app:DirectoryApp; pinned:boolean; onPin:()=>void; onResearch:(input:string)=>void; onGuide:(id:string)=>void;

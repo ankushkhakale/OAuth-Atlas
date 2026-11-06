@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { investigate, evidenceFor } from "../lib/research.ts";
-import { searchCandidates, identityMatches } from "../lib/discovery.ts";
-import { parsePage, siteDomain } from "../lib/research-fetch.ts";
+import { investigate, evidenceFor } from "../lib/research/engine.ts";
+import { searchCandidates, identityMatches } from "../lib/research/discovery.ts";
+import { parsePage, siteDomain } from "../lib/research/fetch.ts";
 
 type Fixture = { body: string; type?: string; status?: number };
 function transport(
@@ -229,8 +229,8 @@ test("nested sitemap filenames remain discovery indexes, never OAuth evidence", 
 
 test("bundled name hints still work when the live registry and search services are unavailable", async () => {
   const requests: string[] = [];
-  const { registryHints } = await import("../lib/discovery.ts");
-  const attempts: import("../lib/research-fetch.ts").Attempt[] = [];
+  const { registryHints } = await import("../lib/research/discovery.ts");
+  const attempts: import("../lib/research/fetch.ts").Attempt[] = [];
   const hints = await registryHints(
     "Front",
     transport({}, requests),
@@ -292,14 +292,14 @@ test("a blocked search is reported as discovery failure, not unreachable documen
 });
 
 test("near spelling suggestions are generic, and short or unrelated names are rejected", async () => {
-  const {providerSuggestions} = await import("../lib/discovery.ts");
+  const {providerSuggestions} = await import("../lib/research/discovery.ts");
   assert.ok(providerSuggestions("githbu").some(s => /github/i.test(s.name)));
   assert.equal(providerSuggestions("app", [{url:"https://apt.example.com/", label:"Apt"}]).length, 0);
   assert.equal(providerSuggestions("NebluaDesk", [{url:"https://unrelated.example.com/", label:"NebulaDesk"}]).length, 0);
 });
 
 test("a transposed search-discovered name is proposed only as an unverified identity", async () => {
-  const {providerSuggestions, identityMatches} = await import("../lib/discovery.ts");
+  const {providerSuggestions, identityMatches} = await import("../lib/research/discovery.ts");
   const hit = {url: "https://www.duolingo.com/", label: "Duolingo"};
   assert.equal(identityMatches("doulingo", hit), false);
   const suggestions = providerSuggestions("doulingo", [hit]);
@@ -308,9 +308,9 @@ test("a transposed search-discovered name is proposed only as an unverified iden
 });
 
 test("unrelated first-engine hits do not suppress a matching fallback search result", async () => {
-  const {searchDocs, identityMatches} = await import("../lib/discovery.ts");
+  const {searchDocs, identityMatches} = await import("../lib/research/discovery.ts");
   const query = "NewOrbit official website";
-  const attempts: import("../lib/research-fetch.ts").Attempt[] = [];
+  const attempts: import("../lib/research/fetch.ts").Attempt[] = [];
   const hits = await searchDocs(query, transport({
     [`https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`]: {
       body: '<a href="https://unrelated.example/">Other product</a>',

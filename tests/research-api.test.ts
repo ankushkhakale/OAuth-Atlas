@@ -1,8 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {researchResponse} from '../lib/research-api.ts';
-import {investigate} from '../lib/research.ts';
-import {catalog} from '../lib/catalog.ts';
+import {researchResponse} from '../lib/research/http.ts';
+import {investigate} from '../lib/research/engine.ts';
+import {catalog} from '../lib/catalog/guides.ts';
 const request=(body:unknown,origin='https://atlas.test')=>new Request('https://atlas.test/api/research',{method:'POST',headers:{Origin:origin,'Content-Type':'application/json'},body:JSON.stringify(body)});
 const fake:typeof investigate=async(_input,progress)=>{progress('Inspecting documentation');return catalog[0];};
 test('database-free research streams progress and the complete report without sign-in',async()=>{

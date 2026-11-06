@@ -30,8 +30,8 @@ import {
   AlertTriangle,
   Globe2,
 } from "lucide-react";
-import { catalog } from "../lib/catalog";
-import { appDirectory } from "../lib/app-directory";
+import { catalog } from "../lib/catalog/guides";
+import { appDirectory } from "../lib/catalog/directory";
 import { AppDirectory } from "../components/app-directory";
 import { guideMarkdown, type Guide, type Step } from "../lib/guide";
 

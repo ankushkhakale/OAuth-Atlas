@@ -1,4 +1,4 @@
-import {investigate} from '../lib/research.ts';
+import {investigate} from '../lib/research/engine.ts';
 import {writeFileSync,mkdirSync} from 'node:fs';
 const inputs=['https://linear.app/developers/oauth-2-0-authentication','https://www.zoho.com/accounts/protocol/oauth.html','https://www.duolingo.com'];
 mkdirSync('docs/evidence',{recursive:true});

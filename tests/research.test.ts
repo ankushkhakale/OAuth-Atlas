@@ -5,7 +5,7 @@ import {
   textFromHTML,
   linksFromHTML,
   buildExtractiveGuide,
-} from "../lib/research.ts";
+} from "../lib/research/engine.ts";
 
 test("research targets reject private addresses, credentials, non-HTTPS, and unsafe ports", () => {
   for (const url of [

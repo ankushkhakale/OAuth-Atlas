@@ -1,8 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import snapshot from "../data/provider-discovery.json" with { type: "json" };
-import {appDirectory,directoryCategories,findDirectoryApps} from "../lib/app-directory.ts";
-import {catalog} from "../lib/catalog.ts";
+import {appDirectory,directoryCategories,findDirectoryApps} from "../lib/catalog/directory.ts";
+import {catalog} from "../lib/catalog/guides.ts";
 
 test("the library retains every discovery starting point while grouping authentication variants",()=>{
   assert.ok(appDirectory.length>800);

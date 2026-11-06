@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { validateDraft } from "../lib/synthesize.ts";
+import { validateDraft } from "../lib/research/synthesize.ts";
 const valid = {
   title: "Register the app",
   detail: "Create the app in your developer console.",
