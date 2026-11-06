@@ -1,0 +1,268 @@
+{
+  "checkedAt": "2026-11-06T17:57:16.077Z",
+  "environment": "Node public retrieval, not browser or hosted Worker",
+  "results": [
+    {
+      "input": "https://linear.app/developers/oauth-2-0-authentication",
+      "elapsedMs": 33876,
+      "status": "oauth_documented",
+      "supported": "documented",
+      "coverage": {
+        "oauth": true,
+        "registration": true,
+        "permissions": true,
+        "approval": true
+      },
+      "documents": 5,
+      "requests": 6,
+      "sources": [
+        {
+          "title": "OAuth 2.0 authentication",
+          "url": "https://linear.app/developers/oauth-2-0-authentication"
+        },
+        {
+          "title": "OAuth actor authorization",
+          "url": "https://linear.app/developers/oauth-actor-authorization"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://linear.app/developers/oauth-2-0-authentication",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://linear.app/developers/oauth-actor-authorization",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://linear.app/settings/api/applications/new",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://linear.app/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://html.duckduckgo.com",
+          "kind": "search",
+          "status": "blocked",
+          "detail": "Search engine challenge; no bypass attempted."
+        },
+        {
+          "url": "https://www.bing.com",
+          "kind": "search",
+          "status": "unavailable",
+          "detail": "Search unavailable for site:linear.app OAuth app review approval publishing: The operation was aborted due to timeout."
+        },
+        {
+          "url": "https://linear.app/docs/code-and-reviews.md",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://linear.app/docs/third-party-application-approvals.md",
+          "kind": "document",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "input": "https://www.zoho.com/accounts/protocol/oauth.html",
+      "elapsedMs": 46044,
+      "status": "oauth_documented",
+      "supported": "documented",
+      "coverage": {
+        "oauth": true,
+        "registration": true,
+        "permissions": true,
+        "approval": false
+      },
+      "documents": 4,
+      "requests": 6,
+      "sources": [
+        {
+          "title": "Introduction | OAuth 2.0 - Zoho",
+          "url": "https://www.zoho.com/developer/oauth/introduction.html"
+        },
+        {
+          "title": "Glossary | OAuth 2.0 - Zoho",
+          "url": "https://www.zoho.com/developer/oauth/glossary.html"
+        },
+        {
+          "title": "Scope | Developer OAuth 2.0 - Zoho",
+          "url": "https://www.zoho.com/developer/oauth/scope.html"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://www.zoho.com/accounts/protocol/oauth.html",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.zoho.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.zoho.com/accounts/protocol/oauth-terminology.html",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.zoho.com/accounts/protocol/oauth/scope.html",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://html.duckduckgo.com",
+          "kind": "search",
+          "status": "blocked",
+          "detail": "Search engine challenge; no bypass attempted."
+        },
+        {
+          "url": "https://www.bing.com",
+          "kind": "search",
+          "status": "ok",
+          "detail": "0 search candidates; 0 relevant candidates for site:zoho.com OAuth app review approval publishing. Candidates are not OAuth evidence."
+        },
+        {
+          "url": "https://www.zoho.com/marketplace/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.zoho.com/marketplace/industry-solutions.md",
+          "kind": "document",
+          "status": "ok"
+        }
+      ]
+    },
+    {
+      "input": "https://www.duolingo.com",
+      "elapsedMs": 93628,
+      "status": "needs_review",
+      "supported": "unconfirmed",
+      "coverage": {
+        "oauth": false,
+        "registration": false,
+        "permissions": false,
+        "approval": false
+      },
+      "documents": 1,
+      "requests": 20,
+      "sources": [
+        {
+          "title": "Duolingo",
+          "url": "https://www.duolingo.com/"
+        }
+      ],
+      "attempts": [
+        {
+          "url": "https://www.duolingo.com/",
+          "kind": "document",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/robots.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap_index.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://ar.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://bn.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap_courses.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap_static.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap_misc.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://www.duolingo.com/sitemap_chess.xml",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://cs.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://de.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://es.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://fr.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://el.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://hu.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://hi.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://id.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        },
+        {
+          "url": "https://it.duolingo.com/llms.txt",
+          "kind": "index",
+          "status": "ok"
+        }
+      ]
+    }
+  ]
+}

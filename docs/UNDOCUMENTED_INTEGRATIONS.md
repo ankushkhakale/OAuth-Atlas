@@ -9,7 +9,7 @@ The current engine can resolve some unfamiliar providers and retain an incomplet
 Specific code gaps:
 
 - `scoreLink` in `lib/discovery.ts` rejects PDF links. `createPageReader` in `lib/research-fetch.ts` also rejects application/pdf. Official integration instructions can therefore be missed even when linked.
-- Name normalization drops every character outside a-z and digits. Native-script names need Unicode-aware handling rather than becoming empty tokens.
+- Native-script normalization was corrected in the final submission pass. A regression test now checks distinct native-script identities. Other format/access gaps below remain.
 - `evidenceFor` in `lib/research.ts` primarily detects OAuth words and registration phrases. Provider-specific parameter names, API keys, session exchanges, partner access, and social sign-in need separate treatment.
 - The reader handles fetched text; it cannot establish the contents of an empty JavaScript-rendered documentation shell.
 - No evidence-import interface currently exists for account-only documentation, OpenAPI files, or provider replies.

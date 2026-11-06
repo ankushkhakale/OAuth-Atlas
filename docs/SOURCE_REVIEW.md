@@ -24,3 +24,7 @@ These checks inspected public official documentation. No provider account was cr
 Effort ranges are editorial planning estimates, not measured setup durations. Approval timing is unknown unless a provider source establishes it. Provider policies, account eligibility, scopes, review exceptions, and admin settings can change; recheck sources before submitting a real app.
 
 The initial public-doc scan cannot establish that a hypothetical app would be approved. The app labels live plans as advice, provides source evidence, and calls out the account-dependent steps explicitly.
+
+## Managed auth recheck — 6 November 2026
+
+Re-read the supplied [managed OAuth page](https://docs.composio.dev/toolkits/managed-auth). It separates Composio-managed OAuth application registration/credentials/redirect URI from each user's authorization, and recommends checking the toolkit method's managed-auth schemes. Custom application branding, scopes or quota can justify a custom OAuth app. The Atlas method section follows that distinction and makes no per-toolkit eligibility promise.

@@ -1,53 +1,30 @@
-# Architecture and scope
+# Architecture
 
-## One vertical slice
-
-A developer should answer: “Can I ship this integration, what could block it, and what do I do now?” The app separates registration, an individual user’s consent, workspace permission, and provider review. It does not handle customer OAuth credentials.
+A single React application and a stateless research endpoint. No app authentication or database.
 
 ```mermaid
 flowchart TD
-  UI[React workspace] --> API[Research endpoint]
-  API --> Agent[Bounded research workflow]
-  Agent --> Web[Public provider documentation]
-  Agent --> Gate[Evidence coverage check]
-  Gate --> Model[Optional local Ollama draft]
-  Model --> Proof[Source and excerpt validation]
-  Gate --> Store[SQLite or D1]
-  Proof --> Store
-  Store --> Link[Immutable guide link]
-  Link --> UI
+  UI[Browser workspace] --> API[Research stream]
+  API --> Engine[Bounded discovery and extraction]
+  Engine --> Docs[Public provider documentation]
+  Engine --> Evidence[Evidence and uncertainty checks]
+  Evidence --> API
+  API --> UI
+  UI --> Local[Browser saved reports and progress]
 ```
 
-## Runtime
+- `app/page.tsx`: directory, guide, comparison, source inspection, checklist, copy and export.
+- `components/app-directory.tsx`: search, filters, category/collection browsing and local pins.
+- `lib/research-api.ts`: same-origin JSON/body checks, streaming progress/results, cancellation, deadline, isolate-local backpressure.
+- `app/api/research/route.ts`: Worker adapter for server-owned optional Ollama and SearXNG settings.
+- `app/api/guides/[id]/route.ts`: the four reviewed guides only. No legacy server-data fallback.
+- `lib/research.ts`, `discovery.ts`, `research-fetch.ts`: provider identity, prioritized public-doc discovery, safe bounded retrieval, evidence classification and recovery reports.
+- `lib/synthesize.ts`: optional local model drafts with source/excerpt validation.
 
-- `app/page.tsx`: library, guide, source inspection, blockers, compare, export, local progress.
-- `lib/catalog.ts`: reviewed provider content, independent of generated guides.
-- `lib/research.ts`: adaptive priority queue, evidence classification, coverage, reports, and model handoff.
-- `lib/research-fetch.ts`: public URL/DNS checks, per-request deadlines, HTML/Markdown/JSON parsing, and bounded reading.
-- `lib/discovery.ts`: broad registry hints, documentation link ranking, and free search adapters.
-- `lib/synthesize.ts`: optional local model adapter with schema and evidence-reference checks.
-- `app/api/research/route.ts`: same-origin boundary, input limits, idempotency, hourly limit, deadline, streaming progress, persistence.
-- `app/api/guides/[id]/route.ts`: immutable guide retrieval.
-- `db/schema.ts` and `drizzle/`: versioned schema, no runtime schema mutation.
+Generated reports stream to the browser and are saved in localStorage, capped at the latest 50. Checklist and pins are also local. There is no app account, server persistence or cross-device synchronization. Export/copy Markdown for portable sharing; only reviewed catalog links are portable across browsers. Source review dates do not claim account eligibility or a tested token exchange.
 
-Local mode uses Miniflare/workerd and SQLite. It requires no cloud account. A hosted Worker uses the same handlers with D1. Hosting authentication is provided by the deployment adapter; the local app has no identity layer and binds to loopback.
+The Request/Response app runs on a hosted Worker or locally under workerd/Miniflare. No database binding or migration is needed. Old D1 records are not queried and are not deleted by this change.
 
-## State and failure handling
+Independent reads run in bounded groups of three. Each redirect is revalidated, private/reserved destinations are rejected, and raw provider HTML is reduced to escaped text. Shared catalog entries locate provider docs but cannot prove another product supports OAuth. Model output cannot invent citations. DNS rebinding remains an application preflight limitation; enforce egress restrictions when self-hosting.
 
-A client creates a request UUID. The server inserts a primary-keyed research run before performing work. Repeated completed IDs return the stored guide ID; running or failed IDs do not silently replay. Results use immutable UUIDs. Browser preferences never masquerade as server-persisted guides.
-
-Independent fetches run in bounded groups of three. Redirects are revalidated, non-text responses are rejected, and each page has a size bound. A run has a deadline and propagates request cancellation. Unavailable secondary pages become trace entries; missing OAuth evidence produces an explicitly incomplete report with discovery attempts and recovery actions. A source from another product or a shared catalog never establishes OAuth support for the requested app. Model failure preserves useful extracted evidence and is recorded explicitly.
-
-The final result is emitted only after guide content and the completed request state are committed in a database batch. There is no automatic replay or invented success. A production version should add a request-status endpoint for reconnecting to an interrupted progress stream.
-
-## Distributed-system judgment
-
-No broker, vector database, or microservices are needed for this slice. Database primary keys handle duplicate run identity across Worker instances. A database query provides approximate per-client throttling; concurrent requests can exceed it, so it is not a strict quota. There is no isolate-local cache used as durable state.
-
-At sustained load: use a durable queue and job status endpoint; enforce atomic quotas; cache public source fetches with TTL and conditional requests; retain source hashes/version history; schedule targeted policy rechecks. Add these when throughput, reliability, or content maintenance requires them.
-
-## Trust boundaries
-
-Visitor input is never an arbitrary inference endpoint, executable prompt, raw SQL, or rendered HTML. URLs are HTTPS-only without embedded credentials, custom ports, or queries; redirects and DNS answers are checked for public reachability. Provider HTML is reduced to text and React escapes it. Ollama is configured only by the deployer; remote page text is explicitly treated as untrusted data. Generated source IDs and proof excerpts must match the retrieved material. Semantic faithfulness still needs human review.
-
-Application DNS preflight has a time-of-check/time-of-use limit. Egress deny rules are the appropriate self-hosting defense against private-address rebinding. No claim of production SSRF completeness is made.
+A run has a three-minute deadline. Disconnect/cancellation aborts retrieval. Best-effort capacity is four active runs per Worker isolate; this is not an IP quota or a global rate limiter. Repeated requests can run again; there is no durable idempotency or background job recovery. Stream failure is explicit and never presented as a completed report.

@@ -376,6 +376,12 @@ export async function investigate(
   let suggestions: ProviderSuggestion[] = [];
   const maxDocuments = Math.max(1, Math.min(options.maxDocuments || 16, 20));
   const maxRequests = Math.max(4, Math.min(options.maxRequests || 36, 40));
+  // Protocol tutorials/standards can explain OAuth, but cannot establish this provider's registration policy.
+  const referenceOnly = (url:string) => {
+    const u=new URL(url), domain=siteDomain(url);
+    const generic=["oauth.com","oauth.net","ietf.org","w3.org"].includes(domain)||u.hostname==="developer.mozilla.org";
+    return generic && (!entry || siteDomain(entry)!==domain);
+  };
   const enqueue = (
     url: string,
     priority: number,
@@ -384,6 +390,7 @@ export async function investigate(
   ) => {
     try {
       const u = publicURL(url);
+      if(referenceOnly(u.href)) return;
       if (tried.has(u.href) || richRepresentations.has(documentKey(u.href)))
         return;
       if (
@@ -554,6 +561,10 @@ export async function investigate(
         continue;
       }
       const { page, task } = result.value;
+      if(referenceOnly(page.url)) continue;
+      for(const link of page.links||[]) {
+        if(link.label && referenceOnly(link.url)) page.text=page.text.split(link.label).join("");
+      }
       tried.add(page.url);
       progress(
         `Inspected ${new URL(page.url).hostname}${new URL(page.url).pathname.slice(0, 70)}`,

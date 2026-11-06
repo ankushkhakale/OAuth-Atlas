@@ -1,12 +1,22 @@
 # OAuth Atlas
 
-An OAuth setup navigator for agent builders: understand the launch gate before implementing the connection.
+Find the setup path before building an OAuth integration. Atlas explains provider registration, permissions, launch blockers, human handoffs, and the difference between hands-on work and provider approval time.
 
-Four source-reviewed examples cover GitHub, Slack, Gmail, and Notion. Submit another app name or an official documentation URL to investigate it live, inspect the evidence, follow a checklist, and export or share the result.
+**[Live demo](https://oauth-atlas-ankush.floralkite4.chatgpt.site)** · [Reviewer walkthrough](docs/SUBMISSION.md) · [Validation](docs/VALIDATION.md)
 
-## Run without paid services
+## What you can do
 
-Requirements: Node.js 24 and pnpm 11.25.0. No provider account, API key, Cloudflare account, or model subscription is needed for the default local app.
+- Browse **908 apps and API products in 24 categories**, including 29 Indian-platform entries. Directory entries are discovery starting points, not tested integrations.
+- Read four source-reviewed examples: **GitHub, Slack, Gmail, and Notion**. Compare their launch gates and change Gmail's read/send scope lens.
+- Research another app by name or provider homepage. Follow public docs, linked developer sites, llms.txt, sitemaps and public authorization metadata.
+- Inspect sources, coverage, access failures, uncertainties, and the next practical action. Missing evidence never becomes a claim that OAuth is unsupported.
+- Save the latest 50 research reports, pins and checklist progress in this browser. Copy reports as Markdown or export them. Reviewed guides have shareable links.
+
+**No app login, Firebase, database, paid search API or hosted model subscription.** Generated reports and checklist progress do not synchronize across devices. Clearing browser storage removes them; export reports you want to keep.
+
+## Run locally
+
+Requires Node.js 24 and pnpm 11.25.0.
 
 ```sh
 corepack enable
@@ -15,57 +25,7 @@ pnpm build
 pnpm start:local
 ```
 
-Open http://127.0.0.1:8080. The local runner applies migrations once and stores SQLite data under `.wrangler/state`. Set `PORT` or `ATLAS_DATA_DIR` to change the port or storage location. Bind to loopback by default; put a TLS reverse proxy in front when exposing it.
-
-Docker alternative:
-
-```sh
-docker compose up --build -d atlas
-```
-
-Open http://127.0.0.1:8080. Data survives container restarts in `atlas-data`. Docker packaging is supplied; see `docs/VALIDATION.md` for what was actually executed.
-
-## Add local AI, without a paid API
-
-The baseline is a deterministic research agent, not an LLM: resolve the provider, follow linked documentation across domains, inspect llms.txt and sitemap indexes, extract evidence, and assemble a source-linked setup plan or an actionable incomplete report. It works without a model download.
-
-For provider-specific drafts, install [Ollama](https://ollama.com), run it locally, and pull an Apache-2.0 model:
-
-```sh
-ollama pull qwen2.5:1.5b
-OLLAMA_URL=http://127.0.0.1:11434 OLLAMA_MODEL=qwen2.5:1.5b pnpm start:local
-```
-
-With Docker, uncomment `OLLAMA_URL` and `OLLAMA_MODEL` in `compose.yaml`, then:
-
-```sh
-docker compose --profile ai up --build -d
-docker compose exec ollama ollama pull qwen2.5:1.5b
-```
-
-The Ollama service has no published port. The 1.5B model download is roughly 1 GB; CPU inference is possible and slower than the default extraction. The local adapter requires structured JSON, known source IDs, and verbatim supporting excerpts present in the retrieved pages. Failed synthesis falls back visibly to extraction. Matching an excerpt does **not** prove the model interpreted it correctly; drafts remain planning advice.
-
-`OLLAMA_URL` is server-owned configuration, never supplied by a site visitor. No OpenAI, hosted inference, or paid search API is used. Documentation retrieval uses public sites and DNS-over-HTTPS; free search discovery is best effort. You can configure a private [SearXNG](https://docs.searxng.org/dev/search_api.html) instance with JSON search enabled using `SEARXNG_URL`. It is server-owned configuration, not a visitor-supplied proxy. See [unknown-app discovery](docs/UNKNOWN_APPS.md).
-
-## What to try
-
-1. Open Gmail and switch from mailbox reading to sending only. The scope decision changes the verification burden.
-2. Compare Slack with GitHub. Pilot distribution, commercial review, and organization/workspace permission are different gates.
-3. Research `Linear` or `https://linear.app/developers/oauth-2-0-authentication`. It has a documentation entry point but no prewritten guide.
-4. Submit another official OAuth documentation URL. Progress comes from real fetches; missing OAuth evidence produces an explicitly incomplete report instead of a fabricated guide.
-5. Check a step, reload, copy a guide link, and export Markdown. The checklist/bookmarks are device-local. Generated guide content is stored on the server and retrievable by its opaque link.
-
-## Product decisions
-
-- **Path to launch, not an OAuth tutorial.** Separate hands-on estimates, provider waiting, blockers, and human handoffs.
-- **Four useful examples over a pretend 100-app library.** The assignment explicitly allows a few varied apps. The same data shape supports additional reviewed guides.
-- **Evidence before confidence.** Requirements link to provider sources; estimates and unresolved questions are labelled. No setup approval or token exchange is claimed.
-- **Managed auth is a separate choice.** A provider OAuth app identifies the integration; each user’s authorization creates a connection. Composio-managed OAuth can avoid registering your own app for eligible toolkits.
-- **No paid dependency.** React, Vinext/Vite, Wrangler/Miniflare, Drizzle, SQLite, Zod, and the optional Ollama/Qwen path are open-source software. Cloudflare/Sites hosting is an optional deployment adapter, not required for self-hosting.
-
-## Architecture and checks
-
-The same web-standard Request/Response app runs on an edge Worker or in the open-source local Worker emulator. SQLite/D1 stores immutable generated guides and request states; React renders safely without raw provider HTML. See [architecture](docs/ARCHITECTURE.md), [source review](docs/SOURCE_REVIEW.md), and [validation](docs/VALIDATION.md).
+Open http://127.0.0.1:8080. Set `PORT` to change the port. The local runner needs no cloud account, credentials or database migration. It binds to loopback by default; use a TLS reverse proxy when exposing a self-hosted instance.
 
 ```sh
 pnpm test
@@ -73,22 +33,40 @@ pnpm typecheck
 pnpm build
 ```
 
-## Limits
+Docker packaging is supplied (`docker compose up --build -d atlas`) but has not been executed in the development environment.
 
-- Source review is not a logged-in registration, real token exchange, or completed provider approval. Those are human handoffs.
-- Live extraction alone cannot reliably infer precise review applicability, wait time, or effort; it keeps these unknown. The local model adds drafts, not independently verified facts.
-- Name resolution uses public provider-discovery metadata and free web discovery. Bundled metadata works without a live registry request. Refresh it with `pnpm discovery:refresh`; source provenance is in `data/NOTICE.md`. Registry records and shared catalog pages are discovery hints, never OAuth proof. Documentation links can lead to external hosting domains. For names that remain ambiguous, supply the provider homepage; the app discovers deeper pages itself. Public search can still throttle or fail.
-- Up to 16 content pages, 36 page/index requests, 2.5 MB per response, a 100-second discovery window, and a three-minute total deadline bound a run. A priority queue retains unvisited candidates and records blocked, timed-out, and successful attempts separately. Login-only, blocked, or client-rendered content may not be available.
-- A guide is shared by URL, subject to the deployment’s access policy. Do not submit private URLs or confidential product details. No user account or cross-device checklist synchronization is included.
-- Research rate limiting is a modest hourly database check, not a strict distributed quota. Site-wide cache, queues, automatic policy refreshes, and production account controls are future work.
-- DNS preflight, HTTPS, redirect checks, and private-address rejection reduce SSRF risk. DNS rebinding is not eliminated by application preflight; self-host behind an egress policy that denies private/reserved ranges.
+## Research and evidence
+
+The default research agent is deterministic extraction, not an LLM. It resolves an identity, follows relevant public documentation, and creates a source-linked setup plan or an incomplete report. It distinguishes OAuth app-registration evidence, OAuth references alone, API-key/token alternatives, identity ambiguity and inaccessible documentation.
+
+Source-backed requirements, planning estimates and unconfirmed questions have separate labels. The four curated guides are documentation reviews, not completed app registrations or token-exchange tests. Live reports do not promise precise effort, approval time or review applicability from keyword matches.
+
+[Composio managed OAuth](https://docs.composio.dev/toolkits/managed-auth) can provide the OAuth application for eligible toolkit methods, including client credentials and redirect URI. Users still authorize their own provider accounts. Custom branding/scopes or a method without managed OAuth can require your own app registration. Atlas links the current catalog and does not invent toolkit eligibility or connect accounts.
+
+## Optional OSS services
+
+No model download is needed. For local drafts, install [Ollama](https://ollama.com), pull the Apache-2.0 Qwen model, then run:
+
+```sh
+ollama pull qwen2.5:1.5b
+OLLAMA_URL=http://127.0.0.1:11434 OLLAMA_MODEL=qwen2.5:1.5b pnpm start:local
+```
+
+The adapter requires known source IDs and supporting excerpts; invalid drafts fall back to extraction. Matching an excerpt does not establish correct interpretation. These drafts remain advice.
+
+Self-host [SearXNG](https://docs.searxng.org/dev/search_api.html) with JSON output enabled and set `SEARXNG_URL` for more controllable discovery. Endpoint settings belong to the deployer, never visitors. No paid service is required. The hosting adapter is optional; authored code and the local runtime are open source.
+
+## Boundaries
+
+- Private, unpublished, PDF-only or JavaScript-only documentation may require a human handoff. An undocumented integration contract cannot be invented. See [unknown apps](docs/UNKNOWN_APPS.md).
+- Runs inspect at most 16 content pages and make at most 36 page/index requests; responses are capped at 2.5 MB. A three-minute deadline and cancellation bound each run. Public search may throttle.
+- Generated guide URLs work only in the browser that saved them. Use **Copy report** or **Export** to share content. Legacy server-saved guides are not exposed by this version.
+- Backpressure is best effort within one Worker isolate, not a distributed quota. There is no durable job queue, idempotency or cross-device history.
+- HTTPS, redirect validation and public-DNS checks reduce SSRF risk; application preflight does not eliminate DNS rebinding. Self-host behind an egress policy that denies private/reserved ranges.
+- No provider login, token exchange, registration or review submission is performed. Do not enter credentials or confidential provider URLs.
+
+See [architecture](docs/ARCHITECTURE.md), [source review](docs/SOURCE_REVIEW.md), and [third-party provenance](data/NOTICE.md).
 
 ## License
 
-MIT for authored code. Third-party dependencies, Qwen model weights, and provider documentation retain their respective licenses and terms. Source excerpts and links are evidence, not a redistribution of whole provider documents.
-
-## Browse the app directory
-
-The library now exposes 908 named apps and API products across 24 categories from the current bundled snapshot, including 29 entries in the Indian-platform collection. It groups authentication variants without dropping their individual research starting points. Search by name, category, ecosystem, or variant; filter collections; pin apps locally; and browse 24 results per page.
-
-Four source-reviewed guides remain available. Other entries are labelled **Research available** and start live research; directory membership does not establish OAuth support, setup requirements, or a tested integration. Public registry notes are labelled as discovery links. The underlying metadata retains its provenance in `data/NOTICE.md`; categories and collection tags are editorial navigation aids. Pins use browser-local storage and do not synchronize across devices.
+MIT for authored code. Dependencies, model weights and provider documentation retain their respective licenses and terms. Source excerpts are short evidence snippets, not copies of whole documentation pages.

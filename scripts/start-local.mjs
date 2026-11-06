@@ -1,5 +1,5 @@
 import { readFileSync, writeFileSync, mkdirSync } from "node:fs";
-import { spawnSync, spawn } from "node:child_process";
+import { spawn } from "node:child_process";
 import path from "node:path";
 const root = process.cwd();
 const source = path.join(root, "dist/server/wrangler.json");
@@ -10,10 +10,7 @@ try {
   console.error("Build first with pnpm build.");
   process.exit(1);
 }
-config.d1_databases = config.d1_databases.map((db) => ({
-  ...db,
-  migrations_dir: path.join(root, "drizzle"),
-}));
+config.d1_databases = [];
 config.vars = {
   ...config.vars,
   ...(process.env.OLLAMA_URL
@@ -28,26 +25,9 @@ config.observability = { enabled: false };
 const localConfig = path.join(root, "dist/server/wrangler.local.json");
 writeFileSync(localConfig, JSON.stringify(config));
 const persist =
-  process.env.ATLAS_DATA_DIR || path.join(root, ".wrangler/state");
+  path.join(root, ".wrangler/state");
 mkdirSync(persist, { recursive: true });
 const wrangler = path.join(root, "node_modules/wrangler/bin/wrangler.js");
-const migrate = spawnSync(
-  process.execPath,
-  [
-    wrangler,
-    "d1",
-    "migrations",
-    "apply",
-    "DB",
-    "--local",
-    "--config",
-    localConfig,
-    "--persist-to",
-    persist,
-  ],
-  { stdio: "inherit", env: { ...process.env, WRANGLER_SEND_METRICS: "false" } },
-);
-if (migrate.status !== 0) process.exit(migrate.status || 1);
 const args = [
   wrangler,
   "dev",

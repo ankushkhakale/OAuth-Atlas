@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { investigate, evidenceFor } from "../lib/research.ts";
-import { searchCandidates } from "../lib/discovery.ts";
+import { searchCandidates, identityMatches } from "../lib/discovery.ts";
 import { parsePage, siteDomain } from "../lib/research-fetch.ts";
 
 type Fixture = { body: string; type?: string; status?: number };
@@ -343,4 +343,18 @@ test("open-data identity fallback finds a provider website without treating meta
   assert.equal(g.sources.length, 0);
   assert.equal(g.research?.requests, 0);
   assert.ok(!requests.includes("https://nebuladesk.example/"));
+});
+
+test('native-script provider names retain their identity instead of collapsing to empty text',()=>{
+ assert.equal(identityMatches('भारत ऐप',{url:'https://example.in',label:'भारत ऐप developer documentation'}),true);
+ assert.equal(identityMatches('भारत ऐप',{url:'https://example.in',label:'Unrelated developer documentation'}),false);
+});
+
+test('linked OAuth protocol tutorials cannot establish provider registration support',async()=>{
+ const requests:string[]=[];
+ const g=await investigate('https://novel.example.com',()=>{},AbortSignal.timeout(5000),{...opts,fetcher:transport({
+ 'https://novel.example.com/':{body:'<main><h1>Novel product</h1><p>API documentation coming soon.</p><a href="https://www.oauth.com/oauth2-servers/client-registration/registering-new-application/">Registering OAuth applications tutorial</a></main>'},
+ 'https://www.oauth.com/oauth2-servers/client-registration/registering-new-application/':{body:oauth}
+ },requests)});
+ assert.equal(g.supported,'unconfirmed');assert.equal(g.research?.coverage.registration,false);assert.ok(g.sources.every(s=>!s.url.includes('oauth.com')));
 });

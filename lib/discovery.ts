@@ -26,7 +26,7 @@ const normalized = (s: string) =>
   s
     .toLowerCase()
     .replace(/\([^)]*\)/g, "")
-    .replace(/[^a-z0-9]/g, "");
+    .replace(/[^\p{L}\p{N}]/gu, "");
 export async function registryHints(
   input: string,
   transport: Transport,

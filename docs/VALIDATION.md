@@ -1,4 +1,21 @@
-# Validation record
+# Current submission validation — 6 November 2026
+
+The database-free version supersedes the historical records below. No app login, Firebase setup or database migration is required.
+
+- **39 Node tests passed**, strict TypeScript checks passed, production Worker build passed, and diff whitespace checks passed.
+- New coverage: stateless research streaming; malformed/oversized/cross-origin rejection; error frames; concurrency release after cancellation; curated citation integrity; native-script identity; protocol tutorials excluded from provider-registration evidence.
+- Real Node retrieval after the tutorial filter: Linear established OAuth registration/permission references from two provider-owned source pages (~34s); Zoho established OAuth registration/permission references (~46s), with approval references unconfirmed. Duolingo retained an incomplete report after one content page and 20 page/index requests (~94s); OAuth support remains unconfirmed. Timings are observations, not promises. Results are in `docs/evidence/final-live-validation.json`; this does not prove hosted Worker networking or a browser token exchange.
+- The initial Linear check exposed generic OAuth tutorial contamination; it was corrected and covered by a regression test before final publication.
+- Managed browser preview was unavailable (`ERR_CONNECTION_REFUSED`; preview daemon stopped). Local browser click-through, reload persistence, clipboard and mobile layout were not re-verified for this revision. Hosted verification is recorded separately if completed.
+- Docker packaging was updated to remove database volumes/migrations but was not executed here.
+- No provider app registration, OAuth token exchange, provider review, project-owner login or assignment submission was performed.
+- Research reports, checklist and pins are local to the browser. Generated report URLs are not portable; Markdown copy/export is the sharing path.
+
+---
+
+# Historical validation records
+
+# Original validation record
 
 Date: 5 November 2026. This record separates executed checks from supplied deployment instructions.
 
@@ -22,7 +39,7 @@ Date: 5 November 2026. This record separates executed checks from supplied deplo
 
 ## Hosted deployment
 
-Version 1 deployed successfully at https://oauth-atlas-ankush.floralkite4.chatgpt.site. It is owner-private. Authenticated hosted research and sharing have not been tested in the browser.
+Version 1 deployed successfully at https://oauth-atlas-ankush.floralkite4.chatgpt.site. It is owner-private. The cloud browser reached its sign-in gate. Hosted research and sharing were not verified as an authenticated visitor in that historical deployment.
 
 A successful deployment does not establish live provider retrieval. Public reviewer access requires an explicit audience decision before submission.
 
@@ -35,7 +52,7 @@ A successful deployment does not establish live provider retrieval. Public revie
 - Real Node retrieval: `Front` resolved by name and reached its own app-registration and OAuth pages; the recorded run took approximately 44 seconds in this environment. `https://docs.gitea.com` found its OAuth provider documentation from the homepage. Figma retrieval reached its provider-owned OAuth-app documentation after following its developer site/index. Baserow returned OAuth references with registration unconfirmed instead of an unsupported claim. These timings are observations, not latency promises.
 - The local browser exercised the live request, saved an inaccessible-source report, and rendered recovery actions without the old terminal error. The managed preview's outgoing fetch limitation remains distinct from the successful Node retrieval checks.
 - An earlier development run that mixed unrelated shared-catalog entries was rejected, preserved explicitly as rejected evidence, fixed, and covered by a regression test.
-- Authenticated hosted generation has not been re-tested in the cloud browser; source retrieval tests and UI rendering checks are reported separately.
+- Authenticated hosted generation has not been re-tested in the cloud browser; the earlier sign-in restriction remained unresolved. Source retrieval tests and UI rendering checks are reported separately.
 
 ## Provider-name discovery repair — 6 November 2026 (India)
 

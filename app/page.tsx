@@ -135,7 +135,8 @@ export default function App() {
         setGuide(null);
         return;
       }
-      const local = catalog.find((g) => g.id === id);
+      const stored=readLocal("atlas:saved", []) as Guide[];
+      const local = catalog.find((g) => g.id === id) || (Array.isArray(stored)?stored.find(g=>g.id===id):undefined);
       if (local) {
         setGuide(local);
         return;
@@ -185,13 +186,13 @@ export default function App() {
   function toggleSave(g: Guide) {
     const next = saved.some((x) => x.id === g.id)
       ? saved.filter((x) => x.id !== g.id)
-      : [g, ...saved];
+      : [g, ...saved].slice(0,50);
     setSaved(next);
     try {
       localStorage.setItem("atlas:saved", JSON.stringify(next));
     } catch {
       setToast(
-        "Browser storage is full. Use the share link or export instead.",
+        "Browser storage is full. Copy or export this report before leaving.",
       );
     }
   }
@@ -217,17 +218,15 @@ export default function App() {
     URL.revokeObjectURL(url);
   }
   async function share(g: Guide) {
-    const url = new URL(location.href);
-    url.search = "";
-    url.searchParams.set("guide", g.id);
     try {
-      await navigator.clipboard.writeText(url.href);
-      setToast(
-        "Guide link copied. Access follows this site’s sharing settings.",
-      );
-    } catch {
-      setToast("Copy the current address to share this guide.");
-    }
+      if(g.kind==='live'){
+        await navigator.clipboard.writeText(guideMarkdown(g));
+        setToast("Report copied as Markdown. Paste it into a document or message to share.");
+      } else {
+        const url=new URL(location.href);url.search="";url.searchParams.set("guide",g.id);
+        await navigator.clipboard.writeText(url.href);setToast("Reviewed guide link copied.");
+      }
+    }catch{download(g);setToast("Clipboard unavailable. Report downloaded as Markdown.");}
   }
   function startResearch(text = "") {
     setInput(text);
@@ -254,17 +253,6 @@ export default function App() {
         const data = (await r.json()) as { error?: string };
         throw new Error(data.error || "Research could not start.");
       }
-      if (r.headers.get("content-type")?.includes("application/json")) {
-        const data = (await r.json()) as { guideId?: string };
-        if (data.guideId) {
-          const rr = await fetch(`/api/guides/${data.guideId}`);
-          const d = (await rr.json()) as { guide?: Guide; error?: string };
-          if (!d.guide) throw new Error(d.error);
-          openGuide(d.guide);
-          setModal(false);
-          return;
-        }
-      }
       const reader = r.body?.getReader();
       if (!reader) throw new Error("The research stream is unavailable.");
       let buffer = "";
@@ -286,16 +274,13 @@ export default function App() {
             completed = true;
             const g = data.guide as Guide;
             openGuide(g);
-            setSaved((prev) => {
-              const next = [g, ...prev.filter((x) => x.id !== g.id)];
-              try {
-                localStorage.setItem("atlas:saved", JSON.stringify(next));
-              } catch {}
-              return next;
-            });
+            const next=[g,...saved.filter(x=>x.id!==g.id)].slice(0,50);
+            setSaved(next);
+            let persisted=true;
+            try {localStorage.setItem("atlas:saved",JSON.stringify(next));}catch{persisted=false;}
             setModal(false);
             setToast(
-              g.supported === "documented"
+              !persisted ? "Report ready, but browser storage is full. Export it before closing this page." : g.supported === "documented"
                 ? "Research saved. Review the sources and setup requirements."
                 : "Research report saved. Review what is still unconfirmed.",
             );
@@ -489,7 +474,7 @@ export default function App() {
                     <ArrowDownToLine size={15} /> Export
                   </button>
                   <button className="primary" onClick={() => share(guide)}>
-                    <Link2 size={15} /> Share guide
+                    <Link2 size={15} /> {guide.kind === "live" ? "Copy report" : "Copy link"}
                   </button>
                 </div>
               </div>
@@ -1307,8 +1292,8 @@ export default function App() {
                     <span className="eyebrow">YOUR WORKSPACE</span>
                     <h1>My guides</h1>
                     <p>
-                      Bookmarks and research results saved on this device. Guide
-                      links remain shareable.
+                      Bookmarks and the latest 50 research results saved on this device. Research
+                      reports can be copied or exported.
                     </p>
                   </div>
                   <button className="primary" onClick={() => startResearch()}>
@@ -1595,14 +1580,12 @@ export default function App() {
               <Check size={14} /> Inspect OAuth setup and policy references
             </span>
             <span>
-              <Check size={14} /> Save a shareable evidence packet
+              <Check size={14} /> Export an evidence packet
             </span>
           </div>
           <p className="research-note">
             No sign-in to the provider. No credentials. No paid API. Public
-            documentation only; unknown requirements stay unknown. The resulting
-            guide is available to anyone who has its link and access to this
-            site.
+            documentation only; unknown requirements stay unknown. Research reports stay in this browser. Copy or export a report to share it.
           </p>
           {events.length > 0 && (
             <div className="activity" aria-live="polite">
